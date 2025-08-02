@@ -1,0 +1,43 @@
+{
+  "dependencies": {
+    "@agentica/core": "^0.30.6",
+    "@agentica/rpc": "^0.30.6",
+    "@azure/core-asynciterator-polyfill": "^1.0.2",
+    "@callstack/repack-plugin-expo-modules": "^5.1.3",
+    "@ryoppippi/unplugin-typia": "^2.6.5",
+    "@samchon/openapi": "^4.6.0",
+    "base-64": "^1.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.3",
+    "openai": "^5.10.2",
+    "react-native-fetch-api": "^3.0.0",
+    "react-native-get-random-values": "^1.11.0",
+    "react-native-polyfill-globals": "^3.1.0",
+    "react-native-url-polyfill": "^2.0.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
+    "tgrid": "^1.2.0",
+    "typia": "^9.6.0",
+    "web-streams-polyfill": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/sqlite3": "^3.1.11",
+    "ts-node": "^10.9.2",
+    "ts-patch": "^3.3.0",
+    "typescript": "~5.8.3"
+  },
+  "scripts": {
+    "prepare": "ts-patch install"
+  },
+  "name": "iha-eun",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
