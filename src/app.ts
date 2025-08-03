@@ -1,12 +1,14 @@
 import  Express  from "express";
 import pool from "./db";
 import authrouter from "./routes/auth";
+import shiftRouter from "./routes/shift"; 
 
 const app = Express();
 const PORT = 3000;
 
 app.use(Express.json());
 app.use("/auth", authrouter);
+app.use("/api/shifts", shiftRouter);
 
 app.get("/", async (req, res) => {
   try {
