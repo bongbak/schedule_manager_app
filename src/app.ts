@@ -3,7 +3,6 @@ import pool from "./db";
 import authrouter from "./routes/auth";
 import payrollRouter from "./routes/payroll";
 import bodyParser from "body-parser";
-import cors from "cors";
 
 const app = Express();
 const PORT = 3000;
@@ -11,7 +10,6 @@ const PORT = 3000;
 app.use(Express.json());
 app.use("/auth", authrouter);
 app.use("/api/payroll",payrollRouter);
-app.use(cors());
 
 app.get("/", async (req, res) => {
   try {
