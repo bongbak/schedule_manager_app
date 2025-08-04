@@ -1,7 +1,9 @@
 import  Express  from "express";
-import pool from "./db";
-import authrouter from "./routes/auth";
-import shiftRouter from "./routes/shift"; 
+import pool from "../db";
+import authrouter from "./auth";
+import shiftRouter from "./shift"; 
+import payrollRouter from "./payroll";
+import bodyParser from "body-parser";
 
 const app = Express();
 const PORT = 3000;
@@ -9,6 +11,8 @@ const PORT = 3000;
 app.use(Express.json());
 app.use("/auth", authrouter);
 app.use("/api/shifts", shiftRouter);
+app.use("/payroll", payrollRouter);
+app.use("body-parser", bodyParser);
 
 app.get("/", async (req, res) => {
   try {
