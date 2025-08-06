@@ -36,7 +36,7 @@ export async function insertAndCalculatePayroll(req: Request, res: Response) {
       return res.status(400).json({ message: "staff_id, base_hours,month를 입력해주세요." });
     }
     //staff 테이블에서 시급 가져오기
-    const [staffRows] = await pool.query("SELECT hourly_wage FROM Staff WHERE staff_id = ?", [staff_id]);
+    const [staffRows] = await pool.query("SELECT hourly_wage FROM staffprofile WHERE staff_id = ?", [staff_id]);
     if ((staffRows as any[]).length === 0) {
       return res.status(404).json({ error: "해당 staff_id를 가진 직원이 존재하지 않습니다." });
     }
@@ -52,7 +52,7 @@ export async function insertAndCalculatePayroll(req: Request, res: Response) {
     const pre_tax_total = base_pay + holiday_pay; //세금 전 총 급여
     const tax_deduction = Math.floor(pre_tax_total * 0.033); // 3.3% 세금 원천징수
     const total_pay = pre_tax_total - tax_deduction; //지급될 총 급여
-    const generated_at = Date.now(); //현재 시간을 밀리초 단위로 저장
+    const generated_at = new Date().toISOString().slice(0, 19).replace('T', ' '); //현재 시간을 밀리초 단위로 저장후 변환
 
     //db 삽입 로직
     const [result] = await pool.execute(

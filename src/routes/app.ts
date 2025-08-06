@@ -4,6 +4,7 @@ import authrouter from "./auth";
 import shiftRouter from "./shift"; 
 import payrollRouter from "./payroll";
 import bodyParser from "body-parser";
+import swapRouter from '../routes/swap'; 
 
 const app = Express();
 const PORT = 3000;
@@ -13,6 +14,7 @@ app.use("/auth", authrouter);
 app.use("/api/shifts", shiftRouter);
 app.use("/payroll", payrollRouter);
 app.use("body-parser", bodyParser);
+app.use('/swap', swapRouter);
 
 app.get("/", async (req, res) => {
   try {

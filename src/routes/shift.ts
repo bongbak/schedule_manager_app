@@ -15,7 +15,7 @@ router.post("/", async (req: Request, res: Response) => {
 
   try {
     const sql = `
-      INSERT INTO Shift (staff_id, date, start_time, end_time)
+      INSERT INTO Shift (staff_id, date, start_time, end_time, is_checked)
       VALUES (?, ?, ?, ?,false)
     `;
     const [result] = await pool.query(sql, [staff_id, date, start_time, end_time]);
