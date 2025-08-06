@@ -1,11 +1,17 @@
-import express from "express";
-import * as controller from "../controllers/swapRequest.controller";
+// src/controllers/swapRequest.controller.ts
+import { Request, Response } from "express";
 
-const router = express.Router();
+export const create = (req: Request, res: Response) => {
+  // 교대 요청 등록 로직
+  res.send("create swap request");
+};
 
-router.post("/", controller.create); // 교대 요청 등록
-router.get("/", controller.list);    // 교대 요청 목록 조회
-router.post("/:id/accept", controller.accept); // 특정 교대 요청 수락
+export const list = (req: Request, res: Response) => {
+  // 교대 요청 목록 조회 로직
+  res.send("list swap requests");
+};
 
-export default router;
-
+export const accept = (req: Request, res: Response) => {
+  // 특정 교대 요청 수락 로직
+  res.send("accept swap request");
+};
