@@ -20,6 +20,7 @@ const specPath = path.resolve(process.cwd(), "openapi_schedule_manager_app.json"
 const spec = JSON.parse(fs.readFileSync(specPath, "utf-8"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spec));
 app.get("/api-docs.json", (_req, res) => res.json(spec));
+app.get("/", (_req, res) => res.send("ok"));
 
 // 라우터
 app.use("/auth", authrouter);
