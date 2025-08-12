@@ -1,0 +1,156 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Schedule Manager API",
+    "version": "0.1.0",
+    "description": "알바 스케줄/급여/교대 요청 관리 API"
+  },
+  "servers": [
+    { "url": "http://localhost:3000", "description": "로컬 개발" }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "회원가입",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["userid", "username", "password", "role"],
+                "properties": {
+                  "userid": { "type": "string" },
+                  "username": { "type": "string" },
+                  "password": { "type": "string", "format": "password" },
+                  "role": { "type": "string", "enum": ["알바생", "직원", "사장"] }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "회원가입 성공" },
+          "400": { "description": "잘못된 요청" },
+          "409": { "description": "이미 존재하는 아이디" }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "로그인",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["userid", "password"],
+                "properties": {
+                  "userid": { "type": "string" },
+                  "password": { "type": "string", "format": "password" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "로그인 성공" },
+          "401": { "description": "인증 실패" }
+        }
+      }
+    },
+    "/api/shifts": {
+      "post": {
+        "summary": "근무 일정 등록",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["staff_id", "date", "start_time", "end_time"],
+                "properties": {
+                  "staff_id": { "type": "integer" },
+                  "date": { "type": "string", "format": "date" },
+                  "start_time": { "type": "string", "example": "09:00:00" },
+                  "end_time": { "type": "string", "example": "18:00:00" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "등록 성공" },
+          "400": { "description": "필수 값 누락" }
+        }
+      }
+    },
+    "/payroll": {
+      "get": {
+        "summary": "전체 급여 조회",
+        "responses": {
+          "200": { "description": "급여 배열" }
+        }
+      }
+    },
+    "/payroll/{staffId}/{month}": {
+      "get": {
+        "summary": "특정 직원 월별 급여 조회",
+        "parameters": [
+          { "in": "path", "name": "staffId", "required": true, "schema": { "type": "integer" } },
+          { "in": "path", "name": "month", "required": true, "schema": { "type": "string" }, "description": "YYYY-MM" }
+        ],
+        "responses": {
+          "200": { "description": "급여 정보" },
+          "404": { "description": "데이터 없음" }
+        }
+      }
+    },
+    "/payroll/calculate-and-insert": {
+      "post": {
+        "summary": "급여 계산 후 저장",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["staff_id", "month", "base_hours"],
+                "properties": {
+                  "staff_id": { "type": "integer" },
+                  "month": { "type": "string" },
+                  "base_hours": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "계산 및 저장 완료" }
+        }
+      }
+    },
+    "/swap": {
+      "get": {
+        "summary": "교대 요청 전체 조회",
+        "responses": {
+          "200": { "description": "교대 요청 배열" }
+        }
+      }
+    },
+    "/swap-requests": {
+      "get": { "summary": "교대 요청 목록", "responses": { "200": { "description": "OK" } } },
+      "post": { "summary": "교대 요청 등록", "responses": { "200": { "description": "OK" } } }
+    },
+    "/swap-requests/{id}/accept": {
+      "post": {
+        "summary": "교대 요청 수락",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    }
+  }
+}

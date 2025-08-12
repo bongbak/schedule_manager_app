@@ -1,10 +1,15 @@
+// src/db.ts
 import mysql from "mysql2/promise";
+import dotenv from "dotenv";
+dotenv.config();
 
 const pool = mysql.createPool({
-  host: "127.0.0.1", // localhost
-  user: "root",      // MySQL 사용자명
-  password: "heesoo0921!",      // MySQL 비밀번호
-  database: "userdb", // 데이터베이스 이름
+  host: process.env.DB_HOST || "127.0.0.1",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "userdb",
+  port: Number(process.env.DB_PORT || 3306),
+  waitForConnections: true,
+  connectionLimit: 10,
 });
-
 export default pool;
