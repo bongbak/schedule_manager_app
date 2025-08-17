@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #333;
+            color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .app-container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 375px;
+            height: 812px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px 30px;
+            box-sizing: border-box;
+        }
+        
+        /* Main content */
+        .content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .title {
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        /* Forms & Inputs */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            -webkit-appearance: none;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #333;
+        }
+
+        .form-group input::placeholder, .form-group textarea::placeholder {
+            color: #aaa;
+        }
+
+        .main-btn {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 18px;
+            border-radius: 10px;
+            border: none;
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .link-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: underline;
+            color: #1a1a1a;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+
+<div class="app-container">
+
+    <div class="content">
+        <h1 class="title">Register</h1>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Value">
+        </div>
+        <div class="form-group">
+            <label for="reg-password">password</label>
+            <input type="password" id="reg-password" placeholder="Value">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Value">
+        </div>
+        <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" rows="4" placeholder="Value"></textarea>
+        </div>
+        <button class="main-btn" onclick="register()">Submit</button>
+        <button class="link-btn" onclick="goToSignIn()">Already have an account? Sign in</button>
+    </div>
+
+</div>
+
+<script>
+    function register() {
+        const name = document.getElementById('name').value;
+        const password = document.getElementById('reg-password').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        // 입력값 검증
+        if (name && password && email) {
+            console.log(`회원가입 시도 - 이름: ${name}, 비밀번호: ${password}, 이메일: ${email}, 메시지: ${message}`);
+            // 실제 회원가입 로직이 들어가야 함 (예: 서버에 POST 요청)
+            alert('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.');
+            window.location.href = "login.html";  // 회원가입 성공 시 login.html로 이동
+        } else {
+            alert('이름, 비밀번호, 이메일은 필수 입력항목입니다.');
+        }
+    }
+
+    function goToSignIn() {
+        window.location.href = "login.html";
+    }
+</script>
+
+</body>
+</html>

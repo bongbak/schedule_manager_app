@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #333;
+            color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .app-container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 375px;
+            height: 812px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px 30px;
+            box-sizing: border-box;
+        }
+        
+        /* Main content */
+        .content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .title {
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        /* Forms & Inputs */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            -webkit-appearance: none;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #333;
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .main-btn {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 18px;
+            border-radius: 10px;
+            border: none;
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .link-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: underline;
+            color: #1a1a1a;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+
+<div class="app-container">
+
+    <div class="content">
+        <h1 class="title">Sign in</h1>
+        <div class="form-group">
+            <label for="id">ID</label>
+            <input type="text" id="id" placeholder="Value">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Value">
+        </div>
+        <button class="main-btn" onclick="signIn()">Sign In</button>
+        <button class="link-btn" onclick="goToRegister()">Register</button>
+    </div>
+
+</div>
+
+<script>
+    function signIn() {
+        const id = document.getElementById('id').value;
+        const password = document.getElementById('password').value;
+        
+        // 실제로는 서버에 로그인 요청을 보내고 검증해야 합니다.
+        console.log(`로그인 시도 - ID: ${id}, Password: ${password}`);
+        
+        // 임시로 ID와 비밀번호가 모두 입력된 경우 로그인 성공으로 처리
+        if (id && password) {
+            alert('로그인 성공!');
+            window.location.href = 'home.html'; // 로그인 성공 시 home.html로 이동
+        } else {
+            alert('ID와 비밀번호를 모두 입력해주세요.');
+        }
+    }
+
+    function goToRegister() {
+        window.location.href = "register.html";
+    }
+</script>
+
+</body>
+</html>
