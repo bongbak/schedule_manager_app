@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeSwap App UI</title>
+    <link rel="stylesheet" href="h+t.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <div id="home" class="screen active">
+        <header>
+            <i class="fas fa-bars menu-icon"></i>
+            <span class="label">Label</span>
+            <i class="fas fa-ellipsis-v"></i>
+        </header>
+        <main>
+            <div class="message-area"></div>
+        </main>
+        <footer>
+            <div class="input-container">
+                <input type="text" placeholder="Message..." id="messageInput">
+                <i class="fas fa-microphone"></i>
+                <i class="fas fa-image"></i>
+            </div>
+        </footer>
+    </div>
+
+    <div id="home2" class="screen">
+        <header>
+            <i class="fas fa-bars menu-icon"></i>
+            <span class="label">Label</span>
+            <i class="fas fa-ellipsis-v"></i>
+        </header>
+        <main>
+            <div class="message-area"></div>
+        </main>
+        <footer>
+            <div class="input-container keyboard-input">
+                <input type="text" placeholder="Message..." id="keyboardInput">
+                <i class="fas fa-microphone"></i>
+                <i class="fas fa-paper-plane send-icon"></i>
+            </div>
+            <div class="keyboard">
+                <div class="key-row"><div class="key">q</div><div class="key">w</div><div class="key">e</div><div class="key">r</div><div class="key">t</div><div class="key">y</div><div class="key">u</div><div class="key">i</div><div class="key">o</div><div class="key">p</div></div>
+                <div class="key-row"><div class="key">a</div><div class="key">s</div><div class="key">d</div><div class="key">f</div><div class="key">g</div><div class="key">h</div><div class="key">j</div><div class="key">k</div><div class="key">l</div></div>
+                <div class="key-row"><div class="key shift-key">shift</div><div class="key">z</div><div class="key">x</div><div class="key">c</div><div class="key">v</div><div class="key">b</div><div class="key">n</div><div class="key">m</div><div class="key backspace-key">backspace</div></div>
+                <div class="key-row"><div class="key">.</div><div class="key space-key">space</div><div class="key">.</div></div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="timeswap" class="screen">
+        <header>
+            <i class="fas fa-bars menu-icon"></i>
+            <span class="label">TimeSwap</span>
+            <i class="fas fa-plus add-icon"></i>
+        </header>
+        <main>
+            <ul class="post-list" id="postList">
+                <li class="post">
+                    <h3>Title</h3>
+                    <p>Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story.</p>
+                </li>
+            </ul>
+        </main>
+    </div>
+
+    <div id="timeswap-a" class="screen">
+        <header>
+            <i class="fas fa-chevron-left back-icon"></i>
+            <span class="label">TimeSwap</span>
+        </header>
+        <main>
+            <div class="post-detail">
+                <h3>Date</h3>
+                <p class="date-text">08/17/2025</p>
+                <h3>작성자</h3>
+                <p>Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story.</p>
+                <button class="accept-btn">수락</button>
+            </div>
+        </main>
+    </div>
+
+    <div id="schedule" class="screen">
+        <header>
+            <i class="fas fa-bars menu-icon"></i>
+            <span class="label">Schedule</span>
+        </header>
+        <main>
+            <div class="calendar-header">
+                <i class="fas fa-chevron-left month-nav"></i>
+                <span>April 2025</span>
+                <i class="fas fa-chevron-right month-nav"></i>
+            </div>
+            <div class="calendar">
+                <div class="day-label">SUN</div><div class="day-label">MON</div><div class="day-label">TUE</div><div class="day-label">WED</div><div class="day-label">THU</div><div class="day-label">FRI</div><div class="day-label">SAT</div>
+                <div class="day-cell empty"></div><div class="day-cell">1</div><div class="day-cell">2<span class="schedule-item purple">근무자</span></div><div class="day-cell">3<span class="schedule-item orange">근무자</span></div><div class="day-cell">4</div><div class="day-cell">5</div><div class="day-cell">6</div>
+                <div class="day-cell">7</div><div class="day-cell">8</div><div class="day-cell">9</div><div class="day-cell">10</div><div class="day-cell">11</div><div class="day-cell">12</div><div class="day-cell">13</div>
+                <div class="day-cell">14</div><div class="day-cell">15</div><div class="day-cell">16</div><div class="day-cell">17</div><div class="day-cell">18</div><div class="day-cell">19</div><div class="day-cell">20<span class="schedule-item purple">근무자</span></div>
+                <div class="day-cell">21</div><div class="day-cell">22</div><div class="day-cell">23</div><div class="day-cell">24</div><div class="day-cell">25</div><div class="day-cell">26</div><div class="day-cell">27</div>
+                <div class="day-cell">28</div><div class="day-cell">29</div><div class="day-cell">30</div>
+            </div>
+        </main>
+    </div>
+
+    <div id="frame4" class="screen">
+        <header>
+            <i class="fas fa-chevron-left back-icon"></i>
+            <span class="label">TimeSwap</span>
+        </header>
+        <main>
+            <div class="form-group">
+                <label>Staff Id</label>
+                <div class="dropdown-wrapper">
+                    <input type="text" id="staffIdInput" placeholder="Select Id" readonly>
+                    <ul class="dropdown-menu" id="staffIdDropdown">
+                        <li data-value="No.1">No.1</li>
+                        <li data-value="No.2">No.2</li>
+                        <li data-value="No.3">No.3</li>
+                        <li data-value="No.4">No.4</li>
+                        <li data-value="No.5">No.5</li>
+                        <li data-value="No.6">No.6</li>
+                        <li data-value="No.7">No.7</li>
+                        <li data-value="No.8">No.8</li>
+                        <li data-value="No.9">No.9</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Date</label>
+                <div class="dropdown-wrapper">
+                    <input type="text" id="dateInput" placeholder="MM/DD/YYYY" readonly>
+                    <i class="far fa-calendar-alt calendar-icon"></i>
+                    <div id="calendar" class="calendar-dropdown">
+                        <div class="calendar-nav">
+                            <i class="fas fa-chevron-left month-nav"></i>
+                            <span>Aug</span>
+                            <i class="fas fa-chevron-right month-nav"></i>
+                            <i class="fas fa-chevron-left year-nav"></i>
+                            <span>2025</span>
+                            <i class="fas fa-chevron-right year-nav"></i>
+                        </div>
+                        <div class="days-of-week">
+                            <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                        </div>
+                        <div class="days-grid" id="daysGrid">
+                            </div>
+                        <button class="ok-btn">OK</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Text</label>
+                <textarea placeholder="text"></textarea>
+            </div>
+            <button class="submit-btn">등록</button>
+        </main>
+    </div>
+
+    <div id="menu" class="screen menu-overlay">
+        <div class="menu-content">
+            <i class="fas fa-times close-icon"></i>
+            <div id="loginState" class="login-state">
+                <h3 class="signin-text">Sign in</h3>
+                <button class="signin-btn">Sign in</button>
+            </div>
+            <div class="menu-items">
+                <a href="#home" class="menu-item"><i class="fas fa-home"></i>Home</a>
+                <a href="#timeswap" class="menu-item"><i class="fas fa-exchange-alt"></i>TimeSwap</a>
+                <a href="#schedule" class="menu-item"><i class="fas fa-calendar-alt"></i>Schedule</a>
+                <a href="#payroll" class="menu-item"><i class="fas fa-money-bill-wave"></i>Payroll</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
