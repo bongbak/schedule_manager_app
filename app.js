@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 document.addEventListener('DOMContentLoaded', () => {
     const screens = document.querySelectorAll('.screen');
     const menuScreen = document.getElementById('menu');
@@ -295,4 +296,352 @@ document.addEventListener('DOMContentLoaded', () => {
             calendarDropdown.classList.remove('visible');
         }
     });
+=======
+document.addEventListener('DOMContentLoaded', () => {
+    const screens = document.querySelectorAll('.screen');
+    const menuScreen = document.getElementById('menu');
+    const menuIcons = document.querySelectorAll('.menu-icon');
+    const closeIcon = document.querySelector('.close-icon');
+    const messageInput = document.getElementById('messageInput');
+    const keyboardScreen = document.getElementById('home2');
+    const messageArea = document.querySelector('.message-area');
+    const sendButton = document.querySelector('.send-icon');
+    const postList = document.getElementById('postList');
+    const timeswapAddBtn = document.querySelector('.add-icon');
+    const backIcons = document.querySelectorAll('.back-icon');
+    const acceptBtn = document.querySelector('.accept-btn');
+    const staffIdInput = document.getElementById('staffIdInput');
+    const staffIdDropdown = document.getElementById('staffIdDropdown');
+    const dateInput = document.getElementById('dateInput');
+    const calendarIcon = document.querySelector('.calendar-icon');
+    const calendarDropdown = document.getElementById('calendar-dropdown');
+    const registerBtn = document.querySelector('.submit-btn');
+    const payrollViewBtn = document.getElementById('viewPayrollButton');
+    const payrollCalcBtn = document.getElementById('calculatePayrollButton');
+    const staffIdSearchInput = document.getElementById('staffIdSearchInput');
+    const monthSearchInput = document.getElementById('monthSearchInput');
+    const staffIdCalcInput = document.getElementById('staffIdCalcInput');
+    const monthCalcInput = document.getElementById('monthCalcInput');
+    const hourInput = document.getElementById('hourInput');
+    const payrollResultText = document.getElementById('payrollResultText');
+    const payrollCalcResultText = document.getElementById('payrollCalcResultText');
+    const scheduleDaysGrid = document.getElementById('scheduleDaysGrid');
+    const currentMonthYear = document.getElementById('currentMonthYear');
+    const prevMonthBtn = document.querySelector('.prev-month');
+    const nextMonthBtn = document.querySelector('.next-month');
+    const popupOverlay = document.getElementById('schedule-popup');
+    const closePopupBtn = document.querySelector('.close-popup');
+    const popupDetail = document.getElementById('popup-detail');
+
+    let isLoggedIn = false;
+    let today = new Date();
+    let currentScheduleMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    let currentDropdownMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    // 화면 전환 함수
+    function showScreen(id) {
+        screens.forEach(screen => {
+            screen.classList.remove('active');
+        });
+        const targetScreen = document.getElementById(id);
+        if (targetScreen) {
+            targetScreen.classList.add('active');
+        }
+    }
+
+    // 메뉴 열기/닫기
+    menuIcons.forEach(icon => {
+        icon.addEventListener('click', () => {
+            menuScreen.classList.add('active');
+            const loginStateDiv = document.getElementById('loginState');
+            if (isLoggedIn) {
+                loginStateDiv.innerHTML = `
+                    <div class="profile-info">
+                        <img src="https://via.placeholder.com/50" alt="profile">
+                        <div>
+                            <h4>name</h4>
+                            <p>email</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                loginStateDiv.innerHTML = `
+                    <h3 class="signin-text">Sign in</h3>
+                    <button class="signin-btn">Sign in</button>
+                `;
+            }
+        });
+    });
+
+    closeIcon.addEventListener('click', () => {
+        menuScreen.classList.remove('active');
+    });
+
+    // 메뉴 항목 클릭 시 화면 이동
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = item.getAttribute('href').substring(1);
+            showScreen(targetId);
+            menuScreen.classList.remove('active');
+        });
+    });
+
+    // 홈 화면 입력창 클릭 -> 키보드 화면
+    messageInput.addEventListener('focus', () => showScreen('home2'));
+    
+    // 키보드 화면 여백 클릭 -> 홈 화면
+    keyboardScreen.addEventListener('click', (e) => {
+        if (e.target === keyboardScreen) {
+            showScreen('home');
+        }
+    });
+
+    // 키보드 입력 후 메시지 출력
+    sendButton.addEventListener('click', () => {
+        const text = document.getElementById('keyboardInput').value;
+        if (text) {
+            const newMessage = document.createElement('div');
+            newMessage.textContent = text;
+            newMessage.classList.add('message', 'my-message');
+            messageArea.appendChild(newMessage);
+            document.getElementById('keyboardInput').value = '';
+            showScreen('home');
+            messageArea.scrollTop = messageArea.scrollHeight;
+        }
+    });
+
+    // TimeSwap 게시글 클릭 -> TimeSwap(A)
+    postList.addEventListener('click', (e) => {
+        const post = e.target.closest('.post');
+        if (post) {
+            document.getElementById('detailDate').textContent = post.querySelector('h3').textContent;
+            document.getElementById('detailAuthor').textContent = post.querySelector('.author').textContent;
+            document.getElementById('detailBody').textContent = post.querySelector('.body-text').textContent;
+            showScreen('timeswap-a');
+        }
+    });
+
+    // TimeSwap(A) 수락 버튼 클릭 -> Schedule 화면 이동 (임시)
+    acceptBtn.addEventListener('click', () => {
+        alert('근무자가 변경되었습니다.');
+        showScreen('schedule');
+    });
+
+    // TimeSwap `+` 버튼 -> Frame 4
+    timeswapAddBtn.addEventListener('click', () => showScreen('frame4'));
+
+    // 뒤로 가기 버튼 (`<`)
+    backIcons.forEach(icon => {
+        icon.addEventListener('click', () => {
+            // 현재 화면에 따라 동적으로 뒤로가기
+            const currentScreenId = document.querySelector('.screen.active').id;
+            if (currentScreenId === 'timeswap-a' || currentScreenId === 'frame4') {
+                showScreen('timeswap');
+            } else if (currentScreenId.startsWith('payroll-')) {
+                // Payroll 화면별 뒤로가기
+                if (currentScreenId === 'payroll-search1' || currentScreenId === 'payroll-calc1') {
+                    showScreen('payroll-main');
+                } else {
+                    showScreen(currentScreenId.replace('2', '1'));
+                }
+            } else {
+                showScreen('home');
+            }
+        });
+    });
+
+    // Frame 4 '등록' 버튼 클릭 -> TimeSwap에 게시글 추가
+    registerBtn.addEventListener('click', () => {
+        const staffId = staffIdInput.value;
+        const date = dateInput.value;
+        const text = document.getElementById('postBodyText').value;
+
+        if (staffId && date && text) {
+            const newPost = document.createElement('li');
+            newPost.classList.add('post');
+            newPost.innerHTML = `
+                <h3>${date}</h3>
+                <p class="author">by ${staffId}</p>
+                <p class="body-text">${text}</p>
+            `;
+            postList.prepend(newPost);
+            showScreen('timeswap');
+        } else {
+            alert('모든 정보를 입력해주세요.');
+        }
+    });
+    
+    // Frame 4 Staff Id 드롭다운
+    const staffIds = ['No.1', 'No.2', 'No.3', 'No.4', 'No.5', 'No.6', 'No.7', 'No.8', 'No.9'];
+    staffIds.forEach(id => {
+        const li = document.createElement('li');
+        li.textContent = id;
+        li.setAttribute('data-value', id);
+        staffIdDropdown.appendChild(li);
+    });
+
+    staffIdInput.addEventListener('click', () => {
+        staffIdDropdown.classList.toggle('visible');
+    });
+    staffIdDropdown.addEventListener('click', (e) => {
+        if (e.target.tagName === 'LI') {
+            staffIdInput.value = e.target.getAttribute('data-value');
+            staffIdDropdown.classList.remove('visible');
+        }
+    });
+
+    // 달력 날짜 생성 함수 (Schedule, Frame 4 공통 사용)
+    function generateCalendar(date, targetGrid) {
+        targetGrid.innerHTML = '';
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const firstDay = new Date(year, month, 1).getDay();
+        const lastDate = new Date(year, month + 1, 0).getDate();
+
+        for (let i = 0; i < firstDay; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.classList.add('day-cell', 'empty');
+            targetGrid.appendChild(emptyCell);
+        }
+
+        for (let i = 1; i <= lastDate; i++) {
+            const dayCell = document.createElement('div');
+            dayCell.classList.add('day-cell');
+            dayCell.textContent = i;
+            if (targetGrid.id === 'scheduleDaysGrid') {
+                // 더미 데이터로 근무자 일정 추가
+                if (i === 2 || i === 20) {
+                    const item = document.createElement('span');
+                    item.classList.add('schedule-item', 'purple');
+                    item.textContent = '근무자 A';
+                    dayCell.appendChild(item);
+                    dayCell.addEventListener('click', () => {
+                        document.getElementById('popup-detail').innerHTML = `
+                            <h3>${year}년 ${month + 1}월 ${i}일</h3>
+                            <p><strong>근무자:</strong> 근무자 A</p>
+                            <p><strong>근무 시간:</strong> 09:00 - 18:00</p>
+                        `;
+                        showScreen('schedule-popup');
+                    });
+                } else if (i === 3) {
+                    const item = document.createElement('span');
+                    item.classList.add('schedule-item', 'orange');
+                    item.textContent = '근무자 B';
+                    dayCell.appendChild(item);
+                    dayCell.addEventListener('click', () => {
+                        document.getElementById('popup-detail').innerHTML = `
+                            <h3>${year}년 ${month + 1}월 ${i}일</h3>
+                            <p><strong>근무자:</strong> 근무자 B</p>
+                            <p><strong>근무 시간:</strong> 10:00 - 19:00</p>
+                        `;
+                        showScreen('schedule-popup');
+                    });
+                }
+            }
+            targetGrid.appendChild(dayCell);
+        }
+    }
+
+    // Schedule 달력 초기화 및 이벤트
+    function renderScheduleCalendar() {
+        const monthYear = currentScheduleMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
+        currentMonthYear.textContent = monthYear;
+        generateCalendar(currentScheduleMonth, scheduleDaysGrid);
+    }
+    prevMonthBtn.addEventListener('click', () => {
+        currentScheduleMonth.setMonth(currentScheduleMonth.getMonth() - 1);
+        renderScheduleCalendar();
+    });
+    nextMonthBtn.addEventListener('click', () => {
+        currentScheduleMonth.setMonth(currentScheduleMonth.getMonth() + 1);
+        renderScheduleCalendar();
+    });
+    renderScheduleCalendar();
+
+    // Schedule 팝업 닫기
+    closePopupBtn.addEventListener('click', () => showScreen('schedule'));
+
+    // Frame 4 달력 초기화 및 이벤트
+    function renderDropdownCalendar() {
+        const monthYear = currentDropdownMonth.toLocaleString('default', { month: 'short', year: 'numeric' });
+        document.getElementById('dropdownCurrentMonthYear').textContent = monthYear;
+        generateCalendar(currentDropdownMonth, document.getElementById('dropdownDaysGrid'));
+    }
+    calendarIcon.addEventListener('click', () => {
+        calendarDropdown.classList.toggle('visible');
+        renderDropdownCalendar();
+    });
+    document.querySelector('#calendar-dropdown .month-nav:first-child').addEventListener('click', () => {
+        currentDropdownMonth.setMonth(currentDropdownMonth.getMonth() - 1);
+        renderDropdownCalendar();
+    });
+    document.querySelector('#calendar-dropdown .month-nav:last-child').addEventListener('click', () => {
+        currentDropdownMonth.setMonth(currentDropdownMonth.getMonth() + 1);
+        renderDropdownCalendar();
+    });
+    document.getElementById('dropdownDaysGrid').addEventListener('click', (e) => {
+        if (e.target.tagName === 'DIV' && !e.target.classList.contains('empty')) {
+            const day = e.target.textContent;
+            const month = currentDropdownMonth.getMonth() + 1;
+            const year = currentDropdownMonth.getFullYear();
+            dateInput.value = `${String(month).padStart(2, '0')}/${String(day).padStart(2, '0')}/${year}`;
+        }
+    });
+
+    // 페이롤 버튼 이벤트
+    payrollViewBtn.addEventListener('click', () => showScreen('payroll-search1'));
+    payrollCalcBtn.addEventListener('click', () => showScreen('payroll-calc1'));
+
+    // 페이롤 조회 기능
+    document.querySelector('#payroll-search1 .search-icon').addEventListener('click', () => {
+        const staffId = staffIdSearchInput.value;
+        const month = monthSearchInput.value;
+        if (staffId && month) {
+            payrollResultText.textContent = `
+Staff ID: ${staffId}
+Month: ${month}
+--------------------
+총 급여: 3,500,000원
+시급: 10,000원
+근무시간: 200시간
+주휴수당: 150,000원
+세금: 120,000원
+            `;
+            showScreen('payroll-search2');
+        } else {
+            alert('Staff ID와 월을 모두 입력해주세요.');
+        }
+    });
+
+    // 페이롤 계산 기능
+    document.querySelector('#payroll-calc1 .search-icon').addEventListener('click', () => {
+        const staffId = staffIdCalcInput.value;
+        const month = monthCalcInput.value;
+        const hour = parseInt(hourInput.value);
+        if (staffId && month && hour) {
+            const hourlyRate = 10000;
+            const baseSalary = hour * hourlyRate;
+            const weeklyAllowance = Math.floor((hour / 40) * 8 * hourlyRate);
+            const totalBeforeTax = baseSalary + weeklyAllowance;
+            const taxRate = 0.033;
+            const taxAmount = Math.floor(totalBeforeTax * taxRate);
+            const finalSalary = totalBeforeTax - taxAmount;
+
+            payrollCalcResultText.textContent = `
+Staff ID: ${staffId}
+Month: ${month}
+Total Hours: ${hour}
+--------------------
+기본급: ${baseSalary.toLocaleString()}원
+주휴수당: ${weeklyAllowance.toLocaleString()}원
+세금: ${taxAmount.toLocaleString()}원
+최종 급여: ${finalSalary.toLocaleString()}원
+            `;
+            showScreen('payroll-calc2');
+        } else {
+            alert('모든 정보를 입력해주세요.');
+        }
+    });
+>>>>>>> origin/UI
 });
