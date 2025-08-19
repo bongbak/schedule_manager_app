@@ -161,7 +161,15 @@
                 <i class="fas fa-chevron-right month-nav next-month"></i>
             </div>
             <div class="calendar">
-                <div class="day-label">SUN</div><div class="day-label">MON</div><div class="day-label">TUE</div><div class="day-label">WED</div><div class="day-label">THU</div><div class="day-label">FRI</div><div class="day-label">SAT</div>
+                <div class="day-labels-row">
+                    <span class="day-label">SUN</span>
+                    <span class="day-label">MON</span>
+                    <span class="day-label">TUE</span>
+                    <span class="day-label">WED</span>
+                    <span class="day-label">THU</span>
+                    <span class="day-label">FRI</span>
+                    <span class="day-label">SAT</span>
+                </div>
                 <div class="days-grid" id="scheduleDaysGrid"></div>
             </div>
         </main>
@@ -429,6 +437,31 @@
 
         // 메시지 처리 함수
         function processMessage(message) {
+            // Agentica로 메시지 전송
+            window.postMessage({ type: 'chat-message', message: message }, '*');
+
+            // Agentica의 응답 처리
+            window.addEventListener('message', (event) => {
+                if (event.data && event.data.type === 'chat-response') {
+                    appendMessage(event.data.message, 'bot');
+                }
+            });
+
+            // 근무 일정 관련 키워드 체크
+            const scheduleKeywords = ['근무', '스케줄', '일정', '시간'];
+            const actionWords = ['등록', '추가', '변경', '수정', '신청'];
+            
+            if (scheduleKeywords.some(keyword => message.includes(keyword)) &&
+                actionWords.some(word => message.includes(word))) {
+                // TimeSwap 페이지로 이동
+                document.querySelectorAll('.screen').forEach(screen => {
+                    screen.classList.remove('active');
+                });
+                document.getElementById('frame4').classList.add('active');
+                return;
+            }
+
+            // 기존의 다른 대화 처리
             setTimeout(() => {
                 let response;
                 
@@ -490,3 +523,5 @@
     </script>
 </body>
 </html>
+
+<script src="logapp.js"></script>
