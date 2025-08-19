@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TimeSwap App UI</title>
     <link rel="stylesheet" href="logstyle.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.cs    <script src="app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">    <script src="app.js"></script>
     <script src="chat.js"></script>
     <!-- 인라인 스크립트 제거 -->
     <style>
@@ -81,13 +81,13 @@
         </header>
         <main>
             <div class="message-area" id="chatArea">
-                <!-- 채팅 메시지들이 여기에 추가됨 -->
+                <!-- 채팅 메시지들이 여기에 동적으로 추가됩니다 -->
             </div>
         </main>
         <footer>
             <div class="input-container">
-                <input type="text" placeholder="Agentica와 대화하기..." id="messageInput">
-                <i class="fas fa-paper-plane send-icon" onclick="sendMessage()"></i>
+                <input type="text" placeholder="Agentica와 대화하기..." id="messageInput" autocomplete="off">
+                <i class="fas fa-paper-plane send-icon"></i>
             </div>
         </footer>
     </div>
@@ -103,9 +103,9 @@
         </main>
         <footer>
             <div class="input-container keyboard-input">
-                <input type="text" placeholder="Agentica와 대화하기..." id="keyboardInput">
+                <input type="text" placeholder="Agentica와 대화하기..." id="keyboardInput" autocomplete="off">
                 <i class="fas fa-microphone"></i>
-                <i class="fas fa-paper-plane send-icon" onclick="sendKeyboardMessage()"></i>
+                <i class="fas fa-paper-plane send-icon"></i>
             </div>
             <div class="keyboard">
                 <div class="key-row"><div class="key">q</div><div class="key">w</div><div class="key">e</div><div class="key">r</div><div class="key">t</div><div class="key">y</div><div class="key">u</div><div class="key">i</div><div class="key">o</div><div class="key">p</div></div>
@@ -140,8 +140,9 @@
         </header>
         <main>
             <div class="post-detail">
-                <h3>날짜</h3>
+                <h3>날짜 및 시간</h3>
                 <p class="date-text" id="detailDate">08/17/2025</p>
+                <p class="time-text" id="detailTime">14:00-18:00</p>
                 <h3>작성자</h3>
                 <p class="author-text" id="detailAuthor">No.1</p>
                 <h3>본문</h3>
@@ -349,182 +350,9 @@
         </div>
     </div>
 
-    <script src="auth.js"></script>
-<script src="api.js"></script>
-<script src="app.js"></script>
-    <script>
-        // 키보드 입력 메시지 전송 함수
-        function sendKeyboardMessage() {
-            const input = document.getElementById('keyboardInput');
-            const message = input.value.trim();
-            
-            if (message) {
-                const chatArea = document.getElementById('chatArea2');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message user-message';
-                messageDiv.textContent = message;
-                chatArea.appendChild(messageDiv);
-                input.value = '';
-                
-                // Agentica 응답
-                setTimeout(() => {
-                    const responseDiv = document.createElement('div');
-                    responseDiv.className = 'message bot-message';
-                    let response = '';
-                    
-                    if (message.includes('근무') || message.includes('시간')) {
-                        response = 'TimeSwap 메뉴에서 근무 시간 교환을 신청하실 수 있습니다.';
-                    } else if (message.includes('급여') || message.includes('월급')) {
-                        response = 'Payroll 메뉴에서 급여 조회와 계산이 가능합니다.';
-                    } else if (message.includes('일정') || message.includes('스케줄')) {
-                        response = 'Schedule 메뉴에서 근무 일정을 확인하실 수 있습니다.';
-                    } else {
-                        response = '다시 한 번 말씀해 주시겠어요?';
-                    }
-                    
-                    responseDiv.textContent = response;
-                    chatArea.appendChild(responseDiv);
-                    chatArea.scrollTop = chatArea.scrollHeight;
-                }, 1000);
-            }
-        }
-
-        // 키보드의 Enter 키 이벤트
-        document.getElementById('keyboardInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendKeyboardMessage();
-            }
-        });
-
-        // 기존의 초기 웰컴 메시지
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(() => {
-                appendMessage('안녕하세요! 저는 Agentica입니다. 무엇을 도와드릴까요?', 'bot');
-            }, 1000);
-        });
-
-        // 메시지 전송 함수
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const message = input.value.trim();
-            
-            if (message) {
-                appendMessage(message, 'user');
-                input.value = '';
-                processMessage(message);
-            }
-        }
-
-        // Enter 키로 메시지 전송
-        document.getElementById('messageInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
-        // 메시지 추가 함수
-        function appendMessage(message, type) {
-            const chatArea = document.getElementById('chatArea');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}-message`;
-            messageDiv.textContent = message;
-            chatArea.appendChild(messageDiv);
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-
-        let currentStep = '';
-        let swapRequest = {
-            date: '',
-            time: '',
-            reason: ''
-        };
-
-        // 메시지 처리 함수
-        function processMessage(message) {
-            // Agentica로 메시지 전송
-            window.postMessage({ type: 'chat-message', message: message }, '*');
-
-            // Agentica의 응답 처리
-            window.addEventListener('message', (event) => {
-                if (event.data && event.data.type === 'chat-response') {
-                    appendMessage(event.data.message, 'bot');
-                }
-            });
-
-            // 근무 일정 관련 키워드 체크
-            const scheduleKeywords = ['근무', '스케줄', '일정', '시간'];
-            const actionWords = ['등록', '추가', '변경', '수정', '신청'];
-            
-            if (scheduleKeywords.some(keyword => message.includes(keyword)) &&
-                actionWords.some(word => message.includes(word))) {
-                // TimeSwap 페이지로 이동
-                document.querySelectorAll('.screen').forEach(screen => {
-                    screen.classList.remove('active');
-                });
-                document.getElementById('frame4').classList.add('active');
-                return;
-            }
-
-            // 기존의 다른 대화 처리
-            setTimeout(() => {
-                let response;
-                
-                // 키워드에 따른 응답
-                if (message.includes('안녕') || message.includes('hi') || message.includes('hello')) {
-                    response = '안녕하세요! 오늘은 어떤 도움이 필요하신가요?';
-                } else if (message.includes('근무') && message.includes('교환')) {
-                    currentStep = 'date';
-                    response = '근무 시간 교환을 도와드리겠습니다. 원하시는 날짜를 YYYY/MM/DD 형식으로 입력해주세요.';
-                } else if (currentStep === 'date') {
-                    if (/\d{4}\/\d{2}\/\d{2}/.test(message)) {
-                        swapRequest.date = message;
-                        currentStep = 'time';
-                        response = '원하시는 근무 시간대를 선택해주세요:\n1. 오전 (09:00-18:00)\n2. 오후 (13:00-22:00)\n3. 야간 (22:00-07:00)\n숫자로 선택해주세요.';
-                    } else {
-                        response = '날짜 형식이 올바르지 않습니다. YYYY/MM/DD 형식으로 입력해주세요. (예: 2025/08/19)';
-                    }
-                } else if (currentStep === 'time') {
-                    const timeChoice = {
-                        '1': '오전 (09:00-18:00)',
-                        '2': '오후 (13:00-22:00)',
-                        '3': '야간 (22:00-07:00)'
-                    }[message];
-                    
-                    if (timeChoice) {
-                        swapRequest.time = timeChoice;
-                        currentStep = 'reason';
-                        response = '교환 희망 사유를 입력해주세요.';
-                    } else {
-                        response = '1, 2, 3 중 하나의 숫자를 입력해주세요.';
-                    }
-                } else if (currentStep === 'reason') {
-                    swapRequest.reason = message;
-                    currentStep = '';
-                    
-                    // 근무 교환 요청 등록
-                    const newPost = document.createElement('li');
-                    newPost.className = 'post';
-                    newPost.innerHTML = `
-                        <h3>${swapRequest.date}</h3>
-                        <p class="author">by ${localStorage.getItem('userid') || 'Anonymous'}</p>
-                        <p class="body-text">${swapRequest.time} - ${swapRequest.reason}</p>
-                    `;
-                    document.getElementById('postList').appendChild(newPost);
-                    
-                    response = '근무 교환 요청이 등록되었습니다. 다른 직원의 수락을 기다려주세요.';
-                    swapRequest = { date: '', time: '', reason: '' };
-                } else if (message.includes('급여') || message.includes('월급')) {
-                    response = 'Payroll 메뉴에서 급여 조회와 계산이 가능합니다.';
-                } else if (message.includes('일정') || message.includes('스케줄')) {
-                    response = 'Schedule 메뉴에서 근무 일정을 확인하실 수 있습니다.';
-                } else {
-                    response = '근무 시간 교환을 원하시면 "근무 교환"이라고 말씀해주세요.';
-                }
-                
-                appendMessage(response, 'bot');
-            }, 1000);
-        }
-    </script>
+    <script src="app.js"></script>
+    <!-- chat.js 로딩은 app.js에서 처리하므로 제거 -->
+    <!-- 인라인 스크립트들을 app.js로 이동 -->
 </body>
 </html>
 

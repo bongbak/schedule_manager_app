@@ -1,7 +1,64 @@
-// API 엔드포인트 설정
 const API_BASE_URL = 'http://localhost:3000/api';
 
+// 인증 관련 함수들
+async function login(id, password) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id, password })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('userId', data.user.id);
+            localStorage.setItem('userName', data.user.name);
+            localStorage.setItem('userEmail', data.user.email);
+            localStorage.setItem('isAdmin', data.user.isAdmin);
+            
+            return { success: true, user: data.user };
+        } else {
+            return { success: false, message: data.message };
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        return { success: false, message: '서버 연결에 실패했습니다.' };
+    }
+}
+
+async function register(userData) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/auth/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData)
+        });
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Register error:', error);
+        return { success: false, message: '서버 연결에 실패했습니다.' };
+    }
+}
+
+function isAuthenticated() {
+    return localStorage.getItem('token') !== null;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // 이미 로그인되어 있으면 메인 페이지로 이동
+    if (isAuthenticated()) {
+        window.location.href = 'index.html';
+        return;
+    }
+
     const screens = document.querySelectorAll('.screen');
     
     function showScreen(id) {
@@ -168,32 +225,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
     
-        try {
-            const response = await fetch(`${API_BASE_URL}/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id, password })
-            });
-    
-            const data = await response.json();
-            
-            if (data.success) {
-                // 토큰과 사용자 정보를 localStorage에 저장
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userId', data.user.id);
-                localStorage.setItem('userName', data.user.name);
-                localStorage.setItem('isAdmin', data.user.isAdmin);
-                
-                window.location.href = 'index.html'; // 로그인 성공 시 메인 페이지로 이동
-            } else {
-                alert(data.message || 'ID 또는 비밀번호가 올바르지 않습니다.');
-            }
-        } catch (error) {
-            console.error('Login error:', error);
-            alert('로그인 중 오류가 발생했습니다.');
+        const result = await login(id, password);
+        if (result.success) {
+            window.location.href = 'index.html';
+        } else {
+            alert(result.message || 'ID 또는 비밀번호가 올바르지 않습니다.');
         }
     });
     
@@ -217,32 +253,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
     
-        try {
-            const response = await fetch(`${API_BASE_URL}/auth/register`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name,
-                    id,
-                    password,
-                    email,
-                    company
-                })
-            });
-    
-            const data = await response.json();
-            
-            if (data.success) {
-                alert('회원가입이 완료되었습니다.');
-                showScreen('signin');
-            } else {
-                alert(data.message || '회원가입 중 오류가 발생했습니다.');
-            }
-        } catch (error) {
-            console.error('Register error:', error);
-            alert('회원가입 중 오류가 발생했습니다.');
+        const result = await register({ name, id, password, email, company });
+        if (result.success) {
+            alert('회원가입이 완료되었습니다.');
+            showScreen('signin');
+        } else {
+            alert(result.message || '회원가입 중 오류가 발생했습니다.');
         }
     });
     
