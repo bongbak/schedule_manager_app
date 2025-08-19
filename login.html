@@ -108,7 +108,7 @@
         <h1 class="title">Sign in</h1>
         <div class="form-group">
             <label for="id">ID</label>
-            <input type="text" id="id" placeholder="Value">
+            <input type="text" id="userid" placeholder="Value">
         </div>
         <div class="form-group">
             <label for="password">Password</label>
@@ -119,22 +119,51 @@
     </div>
 
 </div>
-
 <script>
     function signIn() {
-        const id = document.getElementById('id').value;
+        const userid = document.getElementById('id').value;
         const password = document.getElementById('password').value;
-        
-        // 실제로는 서버에 로그인 요청을 보내고 검증해야 합니다.
-        console.log(`로그인 시도 - ID: ${id}, Password: ${password}`);
-        
-        // 임시로 ID와 비밀번호가 모두 입력된 경우 로그인 성공으로 처리
-        if (id && password) {
-            alert('로그인 성공!');
-            window.location.href = 'home+times.html'; // home+times.html로 이동하도록 수정
-        } else {
-            alert('ID와 비밀번호를 모두 입력해주세요.');
+
+        // 필수 입력값 검증
+        if (!userid || !password) {
+            alert('아이디와 비밀번호를 모두 입력해주세요.');
+            return;
         }
+
+        // 서버에 보낼 데이터 객체
+        const data = {
+            userid: userid,
+            password: password
+        };
+
+        // fetch API를 이용해 서버에 POST 요청 보내기
+        fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            // 서버 응답 상태 코드 확인
+            if (response.status === 200) {
+                // 로그인 성공 시 응답에서 토큰이나 사용자 정보를 받아올 수 있습니다.
+                // const token = response.headers.get('Authorization');
+                // localStorage.setItem('token', token); // 토큰 저장
+                alert('로그인 성공!');
+                window.location.href = 'home+times.html';
+            } else if (response.status === 401) {
+                alert('로그인 실패: 아이디 또는 비밀번호가 올바르지 않습니다.');
+            } else {
+                return response.json().then(errorData => {
+                    alert(`로그인 실패: ${errorData.message || '서버 오류'}`);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Fetch 에러:', error);
+            alert('네트워크 오류가 발생했습니다. 서버 상태를 확인해 주세요.');
+        });
     }
 
     function goToRegister() {
