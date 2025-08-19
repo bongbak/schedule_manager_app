@@ -333,7 +333,7 @@ Month: ${month}
 Staff ID: ${staffId}
 Month: ${month}
 Total Hours: ${hour}
---------------------
+
 기본급: ${baseSalary.toLocaleString()}원
 주휴수당: ${weeklyAllowance.toLocaleString()}원
 세금: ${taxAmount.toLocaleString()}원
