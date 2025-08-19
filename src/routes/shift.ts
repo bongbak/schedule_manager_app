@@ -21,13 +21,13 @@ router.post("/", async (req: Request, res: Response) => {
     const [result] = await pool.query(sql, [staff_id, date, start_time, end_time]);
     const insertResult = result as { insertId: number };
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "근무 일정 등록 완료",
       shift_id: insertResult.insertId,
     });
   } catch (error) {
     console.error("DB 오류:", error);
-    res.status(500).json({ message: "서버 내부 오류 발생" });
+    return res.status(500).json({ message: "서버 내부 오류 발생" });
   }
 });
 

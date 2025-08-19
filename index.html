@@ -486,29 +486,6 @@
             reason: ''
         };
 
-        // 메시지 처리 함수
-        function processMessage(message, currentScreen) {
-            const chatArea = currentScreen.querySelector('.message-area');
-            const targetChatArea = chatArea;
-
-
-            // 다른 메시지 처리
-            setTimeout(() => {
-                let response;
-                if (message.includes('안녕') || message.includes('hi') || message.includes('hello')) {
-                    response = '안녕하세요! 어떤 도움이 필요하신가요?';
-                } else if (message.includes('급여') || message.includes('월급')) {
-                    response = 'Payroll 메뉴에서 급여 조회와 계산이 가능합니다.';
-                } else if (message.includes('일정') || message.includes('스케줄')) {
-                    response = 'Schedule 메뉴에서 근무 일정을 확인하실 수 있습니다.';
-                } else {
-                    response = '근무 시간 교환을 원하시면 "근무 교환"이라고 말씀해주세요.';
-                }
-                appendMessage(response, 'bot', targetChatArea);
-            }, 500);
-
-            
-        }
     </script>
 </body>
 </html>
