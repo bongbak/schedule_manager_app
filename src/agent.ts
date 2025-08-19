@@ -59,13 +59,46 @@ async function main() {
     }
   };
 
-  const res = await agent.conversate("직원 1번 2025-08 급여 보여줘");
-  console.log(res);
+  // 근무 일정 키워드 체크 함수
+  const isScheduleRequest = (message: string): boolean => {
+    const keywords = ['근무', '스케줄', '일정', '시간'];
+    const actionWords = ['등록', '추가', '변경', '수정', '신청'];
+    
+    return keywords.some(keyword => message.includes(keyword)) &&
+           actionWords.some(word => message.includes(word));
+  };
+
+  // 메시지 처리 함수
+  const handleMessage = async (message: string) => {
+    if (isScheduleRequest(message)) {
+      // TimeSwap 페이지로 이동하고 메시지 반환
+      if (typeof window !== 'undefined') {
+        const timeswapScreen = document.getElementById('frame4');
+        if (timeswapScreen) {
+          document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+          });
+          timeswapScreen.classList.add('active');
+        }
+      }
+      return "근무 일정 등록을 위해 TimeSwap 페이지로 이동했습니다. 필요한 정보를 입력해주세요.";
+    }
+
+    // 기본 대화 처리
+    const res = await agent.conversate(message);
+    return res;
+  };
+
+  // 이벤트 리스너 등록
+  if (typeof window !== 'undefined') {
+    window.addEventListener('message', async (event) => {
+      if (event.data && event.data.type === 'chat-message') {
+        const response = await handleMessage(event.data.message);
+        window.postMessage({ type: 'chat-response', message: response }, '*');
+      }
+    });
+  }
 }
-
-main().catch(console.error);
-
-main().catch(console.error);
 
 // Node 18 미만이면 fetch가 없을 수 있음 → 아래 두 줄로 대체
 // import fetch from "node-fetch";

@@ -257,7 +257,17 @@ footer {
     font-weight: bold;
     font-size: 12px;
 }
+.day-labels {
+    display: flex; /* Flexbox 활성화 */
+    justify-content: space-around; /* 가로로 균등 배치 */
+    margin-bottom: 10px;
+    font-weight: bold;
+}
 
+.day-labels div {
+    width: calc(100% / 7);
+    text-align: center;
+}
 .days-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);

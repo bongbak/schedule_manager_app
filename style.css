@@ -194,14 +194,38 @@ footer {
 }
 .calendar-header i { cursor: pointer; }
 
-.calendar {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-  gap: 5px;
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.day-label { font-weight: bold; font-size: 12px; }
+.calendar {
+  width: 100%;
+}
+
+.day-labels-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.day-label {
+  flex: 1;
+  font-weight: bold;
+  font-size: 12px;
+  text-align: center;
+  display: inline-block;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  width: 100%;
+}
 .day-cell {
   padding: 10px;
   border: 1px solid #eee;
