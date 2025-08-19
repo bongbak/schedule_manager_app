@@ -23,8 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const monthSearchInput = document.getElementById('monthSearchInput');
     const staffIdCalcInput = document.getElementById('staffIdCalcInput');
     const monthCalcInput = document.getElementById('monthCalcInput');
-    const hourlyRateInput = document.getElementById('hourlyRateInput');
-    const hourInput = document.getElementById('hourInput');
     const payrollResultText = document.getElementById('payrollResultText');
     const payrollCalcResultText = document.getElementById('payrollCalcResultText');
     const scheduleDaysGrid = document.getElementById('scheduleDaysGrid');
@@ -36,10 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const okCalendarBtn = document.querySelector('.calendar-dropdown .ok-btn');
     const menuSignInBtn = document.getElementById('menuSignInBtn');
     const menuRegisterBtn = document.getElementById('menuRegisterBtn');
-    const commentInput = document.getElementById('commentInput');
-    const addCommentBtn = document.getElementById('addCommentBtn');
-    const commentList = document.getElementById('commentList');
-
+    
     // 로그인 및 회원가입 관련 요소들
     const signinBackBtn = document.getElementById('signinBackBtn');
     const registerBackBtn = document.getElementById('registerBackBtn');
@@ -55,16 +50,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const registerBtn = document.getElementById('registerBtn');
     const userIdDisplay = document.getElementById('userIdDisplay');
     const userNameDisplay = document.getElementById('userNameDisplay');
-
+    
     let selectedDate = null;
     let isLoggedIn = false;
     let loggedInUser = null;
     let today = new Date();
     let currentScheduleMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     let currentDropdownMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    let currentPostId = null;
     let sourceScreen = 'home'; // Register 화면으로 이동하기 직전의 화면을 저장하는 변수
-
+    
     // 임시 데이터베이스 (실제로는 서버와 연동)
     const usersDB = [
         { id: 'admin', password: 'password', name: '사장님', company: 'ABC 기업', isAdmin: true },
@@ -78,14 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 1,
             date: '08/17/2025',
             author: 'No.1',
-            body: '근무 시간 교환을 희망합니다.',
-            comments: [
-                { id: 1, author: '김철수', text: '몇 시 근무를 희망하시나요?' },
-                { id: 2, author: 'No.1', text: '오전 9시입니다.' }
-            ]
+            body: '근무 시간 교환을 희망합니다.'
         }
     ];
-
+    
     function showScreen(id) {
         screens.forEach(screen => {
             screen.classList.remove('active');
@@ -95,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             targetScreen.classList.add('active');
         }
     }
-
+    
     function updateMenuState() {
         if (isLoggedIn) {
             document.getElementById('menu').classList.add('logged-in');
@@ -105,22 +95,22 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('menu').classList.remove('logged-in');
         }
     }
-
+    
     // 초기 화면 설정
     showScreen('home');
     updateMenuState();
     renderPosts();
-
+    
     menuIcons.forEach(icon => {
         icon.addEventListener('click', () => {
             menuScreen.classList.add('active');
         });
     });
-
+    
     closeIcon.addEventListener('click', () => {
         menuScreen.classList.remove('active');
     });
-
+    
     document.querySelectorAll('.menu-item').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
@@ -129,17 +119,17 @@ document.addEventListener('DOMContentLoaded', () => {
             menuScreen.classList.remove('active');
         });
     });
-
+    
     // 로그인 프레임 기능
     loginBtn.addEventListener('click', () => {
         const id = loginIdInput.value;
         const password = loginPasswordInput.value;
-
+    
         if (!id || !password) {
             alert('ID와 Password를 모두 입력해주세요.');
             return;
         }
-
+    
         const user = usersDB.find(u => u.id === id && u.password === password);
         if (user) {
             isLoggedIn = true;
@@ -150,15 +140,15 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('ID 또는 비밀번호가 올바르지 않습니다.');
         }
     });
-
+    
     switchToRegisterBtn.addEventListener('click', (e) => {
         e.preventDefault();
         sourceScreen = 'signin';
         showScreen('register');
     });
-
+    
     signinBackBtn.addEventListener('click', () => showScreen('home'));
-
+    
     // 회원가입 프레임 기능
     registerBtn.addEventListener('click', () => {
         const name = registerNameInput.value;
@@ -166,28 +156,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = registerPasswordInput.value;
         const email = registerEmailInput.value;
         const company = registerCompanyInput.value;
-
+    
         if (!name || !id || !password || !email || !company) {
             alert('모든 정보를 입력해주세요.');
             return;
         }
-
+    
         if (usersDB.some(u => u.id === id)) {
             alert('이미 존재하는 ID입니다.');
             return;
         }
-
+    
         const newUser = { id, password, name, email, company, isAdmin: false };
         usersDB.push(newUser);
         alert('회원가입이 완료되었습니다.');
         showScreen('signin');
     });
-
+    
     registerBackBtn.addEventListener('click', () => {
         showScreen(sourceScreen);
         sourceScreen = 'home'; // 초기값으로 재설정
     });
-
+    
     // 메뉴 버튼 기능 (로그인/회원가입 화면으로 이동)
     menuSignInBtn.addEventListener('click', () => {
         sourceScreen = 'home';
@@ -198,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sourceScreen = 'home';
         showScreen('register');
     });
-
+    
     // 챗봇 기능 연동
     messageInput.addEventListener('focus', () => showScreen('home2'));
     
@@ -207,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showScreen('home');
         }
     });
-
+    
     sendButton.addEventListener('click', () => {
         const text = document.getElementById('keyboardInput').value;
         if (text) {
@@ -216,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
             newMessage.classList.add('message', 'my-message');
             messageArea.appendChild(newMessage);
             document.getElementById('keyboardInput').value = '';
-
+    
             // 챗봇 기능 (사장님 계정만)
             if (loggedInUser && loggedInUser.isAdmin) {
                 if (text.includes('근무자') && text.includes('근무 요일') && text.includes('근무 시간')) {
@@ -228,24 +218,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         messageArea.scrollTop = messageArea.scrollHeight;
                         renderScheduleCalendar();
                     }, 500);
-
+    
                     const workerName = text.match(/근무자\s*([A-Za-z가-힣]+)/);
                     const scheduleInfo = text.match(/([월화수목금토일]+)\s*(.*)/);
-
+    
                     if (workerName && scheduleInfo) {
                         const days = scheduleInfo[1].split('');
                         const time = scheduleInfo[2].trim();
                         
                         const tomorrow = new Date();
                         tomorrow.setDate(tomorrow.getDate() + 1);
-
+    
                         for (let i = 0; i < 30; i++) {
                             const date = new Date(tomorrow);
                             date.setDate(tomorrow.getDate() + i);
                             
                             const dayOfWeek = date.getDay();
                             const dayMap = ['일', '월', '화', '수', '목', '금', '토'];
-
+    
                             if (days.includes(dayMap[dayOfWeek])) {
                                 schedulesDB.push({
                                     date: date.toISOString().slice(0, 10),
@@ -278,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
             postList.appendChild(newPost);
         });
     }
-
+    
     // 게시글 클릭 시 상세 페이지 이동
     postList.addEventListener('click', (e) => {
         const postElement = e.target.closest('.post');
@@ -286,59 +276,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const postId = parseInt(postElement.dataset.postId);
             const post = postsDB.find(p => p.id === postId);
             if (post) {
-                currentPostId = postId;
                 document.getElementById('detailDate').textContent = post.date;
                 document.getElementById('detailAuthor').textContent = `by ${post.author}`;
                 document.getElementById('detailBody').textContent = post.body;
-                renderComments(post.comments);
                 showScreen('timeswap-a');
             }
         }
     });
-
-    // 댓글 렌더링
-    function renderComments(comments) {
-        commentList.innerHTML = '';
-        comments.forEach(comment => {
-            const commentItem = document.createElement('li');
-            commentItem.classList.add('comment-item');
-            commentItem.innerHTML = `
-                <p class="comment-author">${comment.author}</p>
-                <p class="comment-text">${comment.text}</p>
-            `;
-            commentList.appendChild(commentItem);
-        });
-    }
-
-    // 댓글 등록
-    addCommentBtn.addEventListener('click', () => {
-        if (!isLoggedIn) {
-            alert('로그인 후 댓글을 작성할 수 있습니다.');
-            return;
-        }
-        const text = commentInput.value.trim();
-        if (text && currentPostId) {
-            const post = postsDB.find(p => p.id === currentPostId);
-            if (post) {
-                const newComment = {
-                    id: post.comments.length + 1,
-                    author: loggedInUser.name,
-                    text: text
-                };
-                post.comments.push(newComment);
-                renderComments(post.comments);
-                commentInput.value = '';
-            }
-        }
-    });
-
+    
     acceptBtn.addEventListener('click', () => {
         alert('근무자가 변경되었습니다.');
         showScreen('schedule');
     });
-
+    
     timeswapAddBtn.addEventListener('click', () => showScreen('frame4'));
-
+    
     backIcons.forEach(icon => {
         icon.addEventListener('click', () => {
             const currentScreenId = document.querySelector('.screen.active').id;
@@ -355,19 +307,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
+    
     registerPostBtn.addEventListener('click', () => {
         const staffId = staffIdInput.value;
         const date = dateInput.value;
         const text = document.getElementById('postBodyText').value;
-
+    
         if (staffId && date && text) {
             const newPost = {
                 id: postsDB.length + 1,
                 date: date,
                 author: staffId,
-                body: text,
-                comments: []
+                body: text
             };
             postsDB.unshift(newPost);
             renderPosts();
@@ -384,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
         li.setAttribute('data-value', id);
         staffIdDropdown.appendChild(li);
     });
-
+    
     staffIdInput.addEventListener('click', () => {
         staffIdDropdown.classList.toggle('visible');
     });
@@ -394,25 +345,25 @@ document.addEventListener('DOMContentLoaded', () => {
             staffIdDropdown.classList.remove('visible');
         }
     });
-
+    
     function generateCalendar(date, targetGrid) {
         targetGrid.innerHTML = '';
         const year = date.getFullYear();
         const month = date.getMonth();
         const firstDay = new Date(year, month, 1).getDay();
         const lastDate = new Date(year, month + 1, 0).getDate();
-
+    
         for (let i = 0; i < firstDay; i++) {
             const emptyCell = document.createElement('div');
             emptyCell.classList.add('day-cell', 'empty');
             targetGrid.appendChild(emptyCell);
         }
-
+    
         for (let i = 1; i <= lastDate; i++) {
             const dayCell = document.createElement('div');
             dayCell.classList.add('day-cell');
             dayCell.textContent = i;
-
+    
             const dateISO = new Date(year, month, i).toISOString().slice(0, 10);
             const scheduleItem = schedulesDB.find(s => s.date === dateISO);
             
@@ -421,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.classList.add('schedule-item', scheduleItem.color);
                 item.textContent = `근무자 ${scheduleItem.worker}`;
                 dayCell.appendChild(item);
-
+    
                 dayCell.addEventListener('click', () => {
                     document.getElementById('popup-detail').innerHTML = `
                         <h3>${year}년 ${month + 1}월 ${i}일</h3>
@@ -434,7 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
             targetGrid.appendChild(dayCell);
         }
     }
-
+    
     function renderScheduleCalendar() {
         const monthYear = currentScheduleMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
         currentMonthYear.textContent = monthYear;
@@ -449,9 +400,9 @@ document.addEventListener('DOMContentLoaded', () => {
         renderScheduleCalendar();
     });
     renderScheduleCalendar();
-
+    
     closePopupBtn.addEventListener('click', () => showScreen('schedule'));
-
+    
     function renderDropdownCalendar() {
         const monthYear = currentDropdownMonth.toLocaleString('default', { month: 'short', year: 'numeric' });
         document.getElementById('dropdownCurrentMonthYear').textContent = monthYear;
@@ -487,10 +438,10 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('날짜를 선택해주세요.');
         }
     });
-
+    
     payrollViewBtn.addEventListener('click', () => showScreen('payroll-search1'));
     payrollCalcBtn.addEventListener('click', () => showScreen('payroll-calc1'));
-
+    
     document.querySelector('#payroll-search1 .search-icon').addEventListener('click', () => {
         const staffId = staffIdSearchInput.value;
         const month = monthSearchInput.value;
@@ -510,35 +461,21 @@ Month: ${month}
             alert('Staff ID와 월을 모두 입력해주세요.');
         }
     });
-
+    
     document.querySelector('#payroll-calc1 .search-icon').addEventListener('click', () => {
         const staffId = staffIdCalcInput.value;
         const month = monthCalcInput.value;
-        const hourlyRate = parseInt(hourlyRateInput.value);
-        const hour = parseInt(hourInput.value);
-
-        if (staffId && month && hourlyRate && hour) {
-            const baseSalary = hour * hourlyRate;
-            const weeklyAllowance = Math.floor((hour / 40) * 8 * hourlyRate);
-            const totalBeforeTax = baseSalary + weeklyAllowance;
-            const taxRate = 0.033;
-            const taxAmount = Math.floor(totalBeforeTax * taxRate);
-            const finalSalary = totalBeforeTax - taxAmount;
-
+    
+        if (staffId && month) {
             payrollCalcResultText.textContent = `
 Staff ID: ${staffId}
 Month: ${month}
-Hourly Rate: ${hourlyRate.toLocaleString()}원
-Total Hours: ${hour}
 --------------------
-기본급: ${baseSalary.toLocaleString()}원
-주휴수당: ${weeklyAllowance.toLocaleString()}원
-세금: ${taxAmount.toLocaleString()}원
-최종 급여: ${finalSalary.toLocaleString()}원
+예상 급여: 3,500,000원
             `;
             showScreen('payroll-calc2');
         } else {
-            alert('모든 정보를 입력해주세요.');
+            alert('Staff ID와 월을 모두 입력해주세요.');
         }
     });
 });
