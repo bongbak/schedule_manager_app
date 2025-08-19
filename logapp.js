@@ -1,15 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 해시 변경에 따른 화면 전환
-    function handleHash() {
-        const hash = window.location.hash.slice(1) || 'home';
-        showScreen(hash);
-    }
-
-    // 초기 해시 처리 및 해시 변경 이벤트 리스너 추가
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
-
     const screens = document.querySelectorAll('.screen');
+    
+    function showScreen(id) {
+        screens.forEach(screen => {
+            screen.classList.remove('active');
+        });
+        const targetScreen = document.getElementById(id);
+        if (targetScreen) {
+            targetScreen.classList.add('active');
+        }
+    }
     const menuScreen = document.getElementById('menu');
     const menuIcons = document.querySelectorAll('.menu-icon');
     const closeIcon = document.querySelector('.close-icon');
@@ -199,17 +199,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     switchToRegisterBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        sourceScreen = 'signin';
         showScreen('register');
     });
     
-    signinBackBtn.addEventListener('click', () => {
-        if (document.referrer.includes('index.html')) {
-            window.location.href = 'index.html';
-        } else {
-            window.location.hash = 'home';
-        }
-    });
+    signinBackBtn.addEventListener('click', () => showScreen('home'));
     
     // 회원가입 프레임 기능
     registerBtn.addEventListener('click', async () => {
@@ -253,18 +246,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    registerBackBtn.addEventListener('click', () => {
-        window.location.hash = 'signin';
-    });
+    registerBackBtn.addEventListener('click', () => showScreen('signin'));
     
     // 메뉴 버튼 기능 (로그인/회원가입 화면으로 이동)
-    menuSignInBtn.addEventListener('click', () => {
-        window.location.href = 'login.html#signin';
-    });
+    menuSignInBtn.addEventListener('click', () => showScreen('signin'));
     
-    menuRegisterBtn.addEventListener('click', () => {
-        window.location.href = 'login.html#register';
-    });
+    menuRegisterBtn.addEventListener('click', () => showScreen('register'));
     
     // 챗봇 기능 연동
     messageInput.addEventListener('focus', () => showScreen('home2'));
