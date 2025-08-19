@@ -1,3 +1,6 @@
+// API 엔드포인트 설정
+const API_BASE_URL = 'http://localhost:3000/api';
+
 document.addEventListener('DOMContentLoaded', () => {
     const screens = document.querySelectorAll('.screen');
     
@@ -166,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     
         try {
-            const response = await fetch('/api/auth/login', {
+            const response = await fetch(`${API_BASE_URL}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -177,17 +180,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             if (data.success) {
-                isLoggedIn = true;
-                loggedInUser = data.user;
-                // 로그인 정보를 localStorage에 저장
+                // 토큰과 사용자 정보를 localStorage에 저장
+                localStorage.setItem('token', data.token);
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('userId', data.user.id);
                 localStorage.setItem('userName', data.user.name);
+                localStorage.setItem('isAdmin', data.user.isAdmin);
                 
-                document.getElementById('menuPreLogin').style.display = 'none';
-                document.getElementById('menuPostLogin').style.display = 'block';
-                updateMenuState();
-                showScreen('home');
+                window.location.href = 'index.html'; // 로그인 성공 시 메인 페이지로 이동
             } else {
                 alert(data.message || 'ID 또는 비밀번호가 올바르지 않습니다.');
             }
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     
         try {
-            const response = await fetch('/api/auth/register', {
+            const response = await fetch(`${API_BASE_URL}/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
