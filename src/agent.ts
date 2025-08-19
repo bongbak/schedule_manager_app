@@ -30,9 +30,40 @@ async function main() {
     ],
   });
 
+  // 근무 일정 등록 처리기 구현
+  const handleScheduleRegistration = async (message: string) => {
+    try {
+      // POST 요청으로 근무 일정 등록
+      const response = await fetch(`${NGROK_URL}/api/shifts/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      const result = await response.json();
+      
+      if (response.ok) {
+        return `근무 일정이 성공적으로 등록되었습니다.
+        - 직원 ID: ${result.schedule.staff_id}
+        - 날짜: ${result.schedule.date}
+        - 시작 시간: ${result.schedule.start_time}
+        - 종료 시간: ${result.schedule.end_time}`;
+      } else {
+        return result.message + (result.example ? `\n${result.example}` : '');
+      }
+    } catch (error) {
+      console.error('Schedule registration error:', error);
+      return '근무 일정 등록 중 오류가 발생했습니다. 다시 시도해 주세요.';
+    }
+  };
+
   const res = await agent.conversate("직원 1번 2025-08 급여 보여줘");
   console.log(res);
 }
+
+main().catch(console.error);
 
 main().catch(console.error);
 
