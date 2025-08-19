@@ -12,17 +12,22 @@
     <div id="home" class="screen active">
         <header>
             <i class="fas fa-bars menu-icon"></i>
-            <span class="label">Label</span>
+            <span class="label">Agentica Chat</span>
             <i class="fas fa-ellipsis-v"></i>
         </header>
         <main>
-            <div class="message-area"></div>
+            <div class="message-area" id="chatArea">
+                <!-- 채팅 메시지들이 여기에 추가됨 -->
+                <div class="message bot-message">
+                    안녕하세요! 근무 일정 관리를 도와드릴 수 있습니다.
+                    근무 일정 작성, 조회, 수정 중 원하시는 작업을 입력해주세요.
+                </div>
+            </div>
         </main>
         <footer>
             <div class="input-container">
-                <input type="text" placeholder="Message..." id="messageInput">
-                <i class="fas fa-microphone"></i>
-                <i class="fas fa-image"></i>
+                <input type="text" placeholder="Agentica와 대화하기..." id="messageInput">
+                <i class="fas fa-paper-plane send-icon" onclick="sendMessage()"></i>
             </div>
         </footer>
     </div>
@@ -30,17 +35,17 @@
     <div id="home2" class="screen">
         <header>
             <i class="fas fa-bars menu-icon"></i>
-            <span class="label">Label</span>
+            <span class="label">Agentica Chat</span>
             <i class="fas fa-ellipsis-v"></i>
         </header>
         <main>
-            <div class="message-area"></div>
+            <div class="message-area" id="chatArea2"></div>
         </main>
         <footer>
             <div class="input-container keyboard-input">
-                <input type="text" placeholder="Message..." id="keyboardInput">
+                <input type="text" placeholder="Agentica와 대화하기..." id="keyboardInput">
                 <i class="fas fa-microphone"></i>
-                <i class="fas fa-paper-plane send-icon"></i>
+                <i class="fas fa-paper-plane send-icon" onclick="sendKeyboardMessage()"></i>
             </div>
             <div class="keyboard">
                 <div class="key-row"><div class="key">q</div><div class="key">w</div><div class="key">e</div><div class="key">r</div><div class="key">t</div><div class="key">y</div><div class="key">u</div><div class="key">i</div><div class="key">o</div><div class="key">p</div></div>

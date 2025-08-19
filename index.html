@@ -312,9 +312,16 @@
     <div id="menu" class="screen menu-overlay">
         <div class="menu-content">
             <i class="fas fa-times close-icon"></i>
-            <div id="loginState" class="login-state">
-                <h3 class="signin-text">Sign in</h3>
-                <button class="signin-btn">Sign in</button>
+            <div id="menuPreLogin" class="login-state">
+                <button class="signin-btn" id="menuSignInBtn">Sign in</button>
+                <button class="signin-btn" id="menuRegisterBtn">Register</button>
+            </div>
+            <div id="menuPostLogin" class="profile-info">
+                <img src="https://via.placeholder.com/50" alt="profile image">
+                <div class="profile-text">
+                    <p class="user-id" id="userIdDisplay"></p>
+                    <p class="user-name" id="userNameDisplay"></p>
+                </div>
             </div>
             <div class="menu-items">
                 <a href="#home" class="menu-item"><i class="fas fa-home"></i>Home</a>
