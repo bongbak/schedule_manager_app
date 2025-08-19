@@ -1,4 +1,42 @@
-document.addEventListener('DOMContentLoaded', () => {
+const API_BASE_URL = 'http://localhost:3000/api';
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // 인증 상태 확인
+    if (!localStorage.getItem('token')) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    try {
+        // 토큰 유효성 검증
+        const response = await fetch(`${API_BASE_URL}/user/info`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+
+        const data = await response.json();
+        
+        if (!data.success) {
+            // 토큰이 유효하지 않으면 로그인 페이지로 이동
+            localStorage.clear();
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // 사용자 정보 표시
+        const user = data.user;
+        if (user) {
+            document.getElementById('userIdDisplay').textContent = user.id;
+            document.getElementById('userNameDisplay').textContent = user.name;
+            document.getElementById('menuPostLogin').style.display = 'block';
+            document.getElementById('menuPreLogin').style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Authentication error:', error);
+        localStorage.clear();
+        window.location.href = 'login.html';
+    }
     const screens = document.querySelectorAll('.screen');
     const menuScreen = document.getElementById('menu');
     const menuIcons = document.querySelectorAll('.menu-icon');
@@ -83,6 +121,14 @@ document.addEventListener('DOMContentLoaded', () => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = item.getAttribute('href').substring(1);
+            
+            if (targetId === 'logout') {
+                // 로그아웃 처리
+                localStorage.clear();
+                window.location.href = 'login.html';
+                return;
+            }
+            
             showScreen(targetId);
             menuScreen.classList.remove('active');
         });
