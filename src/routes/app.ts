@@ -11,13 +11,10 @@ import shiftRouter from "./shift";
 import payrollRouter from "./payroll";
 // import swapRouter from "./swap"; // 필요하면 주석 해제
 
-
-const cors = require('cors');
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
 
 app.use(express.json());
-app.use(cors());
 
 // Swagger
 const specPath = path.resolve(process.cwd(), "openapi_schedule_manager_app.json");

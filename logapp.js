@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 해시 변경에 따른 화면 전환
+    function handleHash() {
+        const hash = window.location.hash.slice(1) || 'home';
+        showScreen(hash);
+    }
+
+    // 초기 해시 처리 및 해시 변경 이벤트 리스너 추가
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+
     const screens = document.querySelectorAll('.screen');
     const menuScreen = document.getElementById('menu');
     const menuIcons = document.querySelectorAll('.menu-icon');
@@ -50,14 +60,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const registerBtn = document.getElementById('registerBtn');
     const userIdDisplay = document.getElementById('userIdDisplay');
     const userNameDisplay = document.getElementById('userNameDisplay');
+
+    // 로그인 성공 시 index.html로 이동하는 함수
+    function redirectToIndex() {
+        window.location.href = 'index.html';
+    }
     
     let selectedDate = null;
-    let isLoggedIn = false;
-    let loggedInUser = null;
+    let isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    let loggedInUser = isLoggedIn ? {
+        id: localStorage.getItem('userId'),
+        name: localStorage.getItem('userName')
+    } : null;
     let today = new Date();
     let currentScheduleMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     let currentDropdownMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     let sourceScreen = 'home'; // Register 화면으로 이동하기 직전의 화면을 저장하는 변수
+    
+    // 초기 로그인 상태에 따라 메뉴 표시
+    if (isLoggedIn) {
+        document.getElementById('menuPreLogin').style.display = 'none';
+        document.getElementById('menuPostLogin').style.display = 'block';
+    } else {
+        document.getElementById('menuPreLogin').style.display = 'block';
+        document.getElementById('menuPostLogin').style.display = 'none';
+    }
     
     // 임시 데이터베이스 (실제로는 서버와 연동)
     const usersDB = [
@@ -120,8 +147,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
+    // 페이지 로드 시 로그인 상태 확인
+    document.addEventListener('DOMContentLoaded', () => {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (!isLoggedIn && window.location.pathname.endsWith('index.html')) {
+            window.location.href = 'login.html';
+        }
+    });
+
     // 로그인 프레임 기능
-    loginBtn.addEventListener('click', () => {
+    loginBtn.addEventListener('click', async () => {
         const id = loginIdInput.value;
         const password = loginPasswordInput.value;
     
@@ -130,14 +165,35 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
     
-        const user = usersDB.find(u => u.id === id && u.password === password);
-        if (user) {
-            isLoggedIn = true;
-            loggedInUser = user;
-            updateMenuState();
-            showScreen('home');
-        } else {
-            alert('ID 또는 비밀번호가 올바르지 않습니다.');
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id, password })
+            });
+    
+            const data = await response.json();
+            
+            if (data.success) {
+                isLoggedIn = true;
+                loggedInUser = data.user;
+                // 로그인 정보를 localStorage에 저장
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userId', data.user.id);
+                localStorage.setItem('userName', data.user.name);
+                
+                document.getElementById('menuPreLogin').style.display = 'none';
+                document.getElementById('menuPostLogin').style.display = 'block';
+                updateMenuState();
+                showScreen('home');
+            } else {
+                alert(data.message || 'ID 또는 비밀번호가 올바르지 않습니다.');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            alert('로그인 중 오류가 발생했습니다.');
         }
     });
     
@@ -147,10 +203,16 @@ document.addEventListener('DOMContentLoaded', () => {
         showScreen('register');
     });
     
-    signinBackBtn.addEventListener('click', () => showScreen('home'));
+    signinBackBtn.addEventListener('click', () => {
+        if (document.referrer.includes('index.html')) {
+            window.location.href = 'index.html';
+        } else {
+            window.location.hash = 'home';
+        }
+    });
     
     // 회원가입 프레임 기능
-    registerBtn.addEventListener('click', () => {
+    registerBtn.addEventListener('click', async () => {
         const name = registerNameInput.value;
         const id = registerIdInput.value;
         const password = registerPasswordInput.value;
@@ -162,31 +224,46 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
     
-        if (usersDB.some(u => u.id === id)) {
-            alert('이미 존재하는 ID입니다.');
-            return;
-        }
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name,
+                    id,
+                    password,
+                    email,
+                    company
+                })
+            });
     
-        const newUser = { id, password, name, email, company, isAdmin: false };
-        usersDB.push(newUser);
-        alert('회원가입이 완료되었습니다.');
-        showScreen('signin');
+            const data = await response.json();
+            
+            if (data.success) {
+                alert('회원가입이 완료되었습니다.');
+                showScreen('signin');
+            } else {
+                alert(data.message || '회원가입 중 오류가 발생했습니다.');
+            }
+        } catch (error) {
+            console.error('Register error:', error);
+            alert('회원가입 중 오류가 발생했습니다.');
+        }
     });
     
     registerBackBtn.addEventListener('click', () => {
-        showScreen(sourceScreen);
-        sourceScreen = 'home'; // 초기값으로 재설정
+        window.location.hash = 'signin';
     });
     
     // 메뉴 버튼 기능 (로그인/회원가입 화면으로 이동)
     menuSignInBtn.addEventListener('click', () => {
-        sourceScreen = 'home';
-        showScreen('signin');
+        window.location.href = 'login.html#signin';
     });
     
     menuRegisterBtn.addEventListener('click', () => {
-        sourceScreen = 'home';
-        showScreen('register');
+        window.location.href = 'login.html#register';
     });
     
     // 챗봇 기능 연동
