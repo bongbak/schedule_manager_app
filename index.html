@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeSwap App UI</title>
+    <link rel="stylesheet" href="logstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">    <script src="app.js"></script>
+    <script src="chat.js"></script>
+    <!-- 인라인 스크립트 제거 -->
+    <style>
+        .message-area {
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(100% - 60px);
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            position: relative;
+        }
+        
+        .user-message {
+            background-color: #007bff;
+            color: white;
+            margin-left: auto;
+            border-radius: 15px 15px 0 15px;
+        }
+        
+        .bot-message {
+            background-color: #e9ecef;
+            color: #333;
+            margin-right: auto;
+            border-radius: 15px 15px 15px 0;
+        }
+
+        .send-icon {
+            cursor: pointer;
+            color: #007bff;
+            font-size: 1.2em;
+            margin-left: 10px;
+        }
+
+        .send-icon:hover {
+            color: #0056b3;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: white;
+            border-top: 1px solid #ddd;
+        }
+
+        #messageInput {
+            flex-grow: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 10px 15px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        #messageInput:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="home" class="screen active">
+        <header>
+            <i class="fas fa-bars menu-icon"></i>
+            <span class="label">Agentica Chat</span>
+            <i class="fas fa-ellipsis-v"></i>
+        </header>
+        <main>
+            <div class="message-area" id="chatArea">
+                <!-- 채팅 메시지들이 여기에 동적으로 추가됩니다 -->
+            </div>
+        </main>
+        <footer>
+            <div class="input-container">
+                <input type="text" placeholder="Agentica와 대화하기..." id="messageInput" autocomplete="off">
+                <i class="fas fa-paper-plane send-icon"></i>
+            </div>
+        </footer>
+    </div>
+
+    <div id="home2" class="screen">
+        <header>
+            <i class="fas fa-bars menu-icon"></i>
+            <span class="label">Agentica Chat</span>
+            <i class="fas fa-ellipsis-v"></i>
+        </header>
+        <main>
+            <div class="message-area" id="chatArea2"></div>
+        </main>
+        <footer>
+            <div class="input-container keyboard-input">
+                <input type="text" placeholder="Agentica와 대화하기..." id="keyboardInput" autocomplete="off">
+                <i class="fas fa-microphone"></i>
+                <i class="fas fa-paper-plane send-icon"></i>
+            </div>
+            <div class="keyboard">
+                <div class="key-row"><div class="key">q</div><div class="key">w</div><div class="key">e</div><div class="key">r</div><div class="key">t</div><div class="key">y</div><div class="key">u</div><div class="key">i</div><div class="key">o</div><div class="key">p</div></div>
+                <div class="key-row"><div class="key">a</div><div class="key">s</div><div class="key">d</div><div class="key">f</div><div class="key">g</div><div class="key">h</div><div class="key">j</div><div class="key">k</div><div class="key">l</div></div>
+                <div class="key-row"><div class="key shift-key">shift</div><div class="key">z</div><div class="key">x</div><div class="key">c</div><div class="key">v</div><div class="key">b</div><div class="key">n</div><div class="key">m</div><div class="key backspace-key">backspace</div></div>
+                <div class="key-row"><div class="key">.</div><div class="key space-key">space</div><div class="key">.</div></div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="timeswap" class="screen">
+        <header>
+            <i class="fas fa-bars menu-icon"></i>
+            <span class="label">TimeSwap</span>
+            <i class="fas fa-plus add-icon"></i>
+        </header>
+        <main>
+            <ul class="post-list" id="postList">
+                <li class="post">
+                    <h3>08/17/2025</h3>
+                    <p class="author">by No.1</p>
+                    <p class="body-text">근무 시간 교환을 희망합니다.</p>
+                </li>
+            </ul>
+        </main>
+    </div>
+
+    <div id="timeswap-a" class="screen">
+        <header>
+            <i class="fas fa-chevron-left back-icon"></i>
+            <span class="label">TimeSwap</span>
+        </header>
+        <main>
+            <div class="post-detail">
+                <h3>날짜 및 시간</h3>
+                <p class="date-text" id="detailDate">08/17/2025</p>
+                <p class="time-text" id="detailTime">14:00-18:00</p>
+                <h3>작성자</h3>
+                <p class="author-text" id="detailAuthor">No.1</p>
+                <h3>본문</h3>
+                <p class="body-text" id="detailBody">근무 시간 교환을 희망합니다.</p>
+                <button class="accept-btn">수락</button>
+            </div>
+        </main>
+    </div>
+
+    <div id="schedule" class="screen">
+        <header>
+            <i class="fas fa-bars menu-icon"></i>
+            <span class="label">Schedule</span>
+        </header>
+        <main>
+            <div class="calendar-header">
+                <i class="fas fa-chevron-left month-nav prev-month"></i>
+                <span id="currentMonthYear"></span>
+                <i class="fas fa-chevron-right month-nav next-month"></i>
+            </div>
+            <div class="calendar">
+                <div class="day-labels-row">
+                    <span class="day-label">SUN</span>
+                    <span class="day-label">MON</span>
+                    <span class="day-label">TUE</span>
+                    <span class="day-label">WED</span>
+                    <span class="day-label">THU</span>
+                    <span class="day-label">FRI</span>
+                    <span class="day-label">SAT</span>
+                </div>
+                <div class="days-grid" id="scheduleDaysGrid"></div>
+            </div>
+        </main>
+    </div>
+
+    <div id="frame4" class="screen">
+        <header>
+            <i class="fas fa-chevron-left back-icon"></i>
+            <span class="label">TimeSwap</span>
+        </header>
+        <main>
+            <div class="form-group">
+                <label>Staff Id</label>
+                <div class="dropdown-wrapper">
+                    <input type="text" id="staffIdInput" placeholder="Select Id" readonly>
+                    <ul class="dropdown-menu" id="staffIdDropdown"></ul>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Date</label>
+                <div class="dropdown-wrapper">
+                    <input type="text" id="dateInput" placeholder="MM/DD/YYYY" readonly>
+                    <i class="far fa-calendar-alt calendar-icon"></i>
+                    <div id="calendar-dropdown" class="calendar-dropdown">
+                        <div class="calendar-nav">
+                            <i class="fas fa-chevron-left month-nav"></i>
+                            <span id="dropdownCurrentMonthYear"></span>
+                            <i class="fas fa-chevron-right month-nav"></i>
+                        </div>
+                        <div class="days-of-week">
+                            <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                        </div>
+                        <div class="days-grid" id="dropdownDaysGrid"></div>
+                        <button class="ok-btn">OK</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Text</label>
+                <textarea placeholder="text" id="postBodyText"></textarea>
+            </div>
+            <button class="submit-btn">등록</button>
+        </main>
+    </div>
+
+    <div id="payroll-main" class="screen">
+        <header>
+            <i class="fas fa-bars menu-icon"></i>
+            <span class="label">Payroll</span>
+            <i class="fas fa-ellipsis-v"></i>
+        </header>
+        <main class="payroll-main-buttons">
+            <button class="payroll-btn" id="viewPayrollButton"><i class="fas fa-search"></i><span>급여 조회</span></button>
+            <button class="payroll-btn" id="calculatePayrollButton"><i class="fas fa-dollar-sign"></i><span>급여 계산</span></button>
+        </main>
+    </div>
+
+    <div id="payroll-search1" class="screen">
+        <header>
+            <i class="fas fa-chevron-left back-icon"></i>
+            <span class="label">payroll</span>
+        </header>
+        <main>
+            <div class="search-form">
+                <div class="input-group">
+                    <input type="text" id="staffIdSearchInput" placeholder="Staff Id 입력">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="monthSearchInput" placeholder="Month 입력">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <button class="keyboard-toggle"><i class="fas fa-keyboard"></i></button>
+            </div>
+        </main>
+        <footer>
+            <div class="keyboard">
+                <div class="key-row"><div class="key">1</div><div class="key">2</div><div class="key">3</div><div class="key backspace-key">backspace</div></div>
+                <div class="key-row"><div class="key">4</div><div class="key">5</div><div class="key">6</div><div class="key">clear</div></div>
+                <div class="key-row"><div class="key">7</div><div class="key">8</div><div class="key">9</div><div class="key">.</div></div>
+                <div class="key-row"><div class="key">0</div><div class="key enter-key">Enter</div></div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="payroll-search2" class="screen">
+        <header>
+            <i class="fas fa-chevron-left back-icon"></i>
+            <span class="label">payroll</span>
+        </header>
+        <main>
+            <div class="payroll-result">
+                <h3>Staff의 해당 월 예상 급여</h3>
+                <div class="result-box">
+                    <p class="result-text" id="payrollResultText"></p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="payroll-calc1" class="screen">
+        <header>
+            <i class="fas fa-chevron-left back-icon"></i>
+            <span class="label">payroll</span>
+        </header>
+        <main>
+            <div class="search-form">
+                <div class="input-group">
+                    <input type="text" id="staffIdCalcInput" placeholder="Staff Id 입력">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="monthCalcInput" placeholder="Month 입력">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="hourInput" placeholder="Hour 입력">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <button class="keyboard-toggle"><i class="fas fa-keyboard"></i></button>
+            </div>
+        </main>
+        <footer>
+            <div class="keyboard">
+                <div class="key-row"><div class="key">1</div><div class="key">2</div><div class="key">3</div><div class="key backspace-key">backspace</div></div>
+                <div class="key-row"><div class="key">4</div><div class="key">5</div><div class="key">6</div><div class="key">clear</div></div>
+                <div class="key-row"><div class="key">7</div><div class="key">8</div><div class="key">9</div><div class="key">.</div></div>
+                <div class="key-row"><div class="key">0</div><div class="key enter-key">Enter</div></div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="payroll-calc2" class="screen">
+        <header>
+            <i class="fas fa-chevron-left back-icon"></i>
+            <span class="label">payroll</span>
+        </header>
+        <main>
+            <div class="payroll-result">
+                <h3>주휴수당 포함 급여 계산</h3>
+                <div class="result-box">
+                    <p class="result-text" id="payrollCalcResultText"></p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="menu" class="screen menu-overlay">
+        <div class="menu-content">
+            <i class="fas fa-times close-icon"></i>
+            <div id="menuPreLogin" class="login-state">
+                <button class="signin-btn" id="menuSignInBtn">Sign in</button>
+                <button class="signin-btn" id="menuRegisterBtn">Register</button>
+            </div>
+            <div id="menuPostLogin" class="profile-info">
+                <img src="https://via.placeholder.com/50" alt="profile image">
+                <div class="profile-text">
+                    <p class="user-id" id="userIdDisplay"></p>
+                    <p class="user-name" id="userNameDisplay"></p>
+                </div>
+            </div>
+            <div class="menu-items">
+                <a href="#home" class="menu-item"><i class="fas fa-home"></i>Home</a>
+                <a href="#timeswap" class="menu-item"><i class="fas fa-exchange-alt"></i>TimeSwap</a>
+                <a href="#schedule" class="menu-item"><i class="fas fa-calendar-alt"></i>Schedule</a>
+                <a href="#payroll-main" class="menu-item"><i class="fas fa-money-bill-wave"></i>Payroll</a>
+            </div>
+        </div>
+    </div>
+    
+    <div id="schedule-popup" class="screen popup-overlay">
+        <div class="popup-content">
+            <span class="close-popup">&times;</span>
+            <div id="popup-detail"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <!-- chat.js 로딩은 app.js에서 처리하므로 제거 -->
+    <!-- 인라인 스크립트들을 app.js로 이동 -->
+</body>
+</html>
+
+<script src="logapp.js"></script>

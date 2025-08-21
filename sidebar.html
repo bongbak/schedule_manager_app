@@ -1,0 +1,55 @@
+<div style="flex-grow: 1;">
+    <div style="display: flex; justify-content: flex-end;">
+        <button id="close-sidebar-btn" style="background: none; border: none; font-size: 24px; cursor: pointer;">
+            ×
+        </button>
+    </div>
+    <div style="display: flex; align-items: center; margin-bottom: 30px;">
+        <div style="width: 50px; height: 50px; border-radius: 50%; background-color: #eee;"></div>
+        <div style="margin-left: 15px; cursor: pointer;" onclick="window.location.href='login.html'">
+            <div style="font-weight: bold;">Sign in</div>
+            <div style="font-size: 14px; color: #888;">Tap to sign in</div>
+        </div>
+    </div>
+    <ul style="list-style: none; padding: 0;">
+        <li style="padding: 15px; border-bottom: 1px solid #eee;">
+            <a href="#" style="text-decoration: none; color: #1a1a1a;">
+                <span style="margin-right: 10px;">🏠</span>Home
+            </a>
+        </li>
+        <li style="padding: 15px; border-bottom: 1px solid #eee;">
+            <a href="#" style="text-decoration: none; color: #1a1a1a;">
+                <span style="margin-right: 10px;">⏱️</span>TimeSwap
+            </a>
+        </li>
+        <li style="padding: 15px; border-bottom: 1px solid #eee;">
+            <a href="#" style="text-decoration: none; color: #1a1a1a;">
+                <span style="margin-right: 10px;">🗓️</span>Schedule
+            </a>
+        </li>
+        <li style="padding: 15px; border-bottom: 1px solid #eee;">
+            <a href="#" style="text-decoration: none; color: #1a1a1a;">
+                <span style="margin-right: 10px;">💰</span>Payroll
+            </a>
+        </li>
+        <li style="padding: 15px; border-bottom: 1px solid #eee;">
+            <a href="#" style="text-decoration: none; color: #1a1a1a;">
+                <span style="margin-right: 10px;">⚙️</span>Settings
+            </a>
+        </li>
+        <li style="padding: 15px;">
+            <a href="#" style="text-decoration: none; color: #1a1a1a;">
+                <span style="margin-right: 10px;">📝</span>Keep
+            </a>
+        </li>
+    </ul>
+</div>
+
+<script>
+    document.getElementById('close-sidebar-btn').addEventListener('click', () => {
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        sidebar.classList.remove('active');
+        sidebarOverlay.style.display = 'none';
+    });
+</script>

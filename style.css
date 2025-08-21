@@ -1,0 +1,513 @@
+/* 공통 스타일 */
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f2f5;
+}
+
+.screen {
+  width: 375px;
+  height: 812px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.screen.active {
+  opacity: 1;
+  pointer-events: all;
+  z-index: 100;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+header .label {
+  font-weight: bold;
+}
+
+main {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+footer {
+  padding: 15px;
+  border-top: 1px solid #eee;
+}
+
+/* Home 프레임 */
+.message-area {
+  flex-grow: 1;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message-area .message {
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 70%;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+}
+.message-area .my-message {
+  background-color: #e2f1ff;
+  align-self: flex-end;
+  margin-right: 5px;
+}
+.message-area .other-message {
+  background-color: #f0f0f0;
+  align-self: flex-start;
+  margin-left: 5px;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  background-color: #f7f7f7;
+  border-radius: 25px;
+  padding: 5px 15px;
+}
+
+.input-container input {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 0;
+  font-size: 16px;
+  outline: none;
+}
+
+.input-container i {
+  color: #999;
+  margin-left: 10px;
+}
+
+/* Home2(keyboard) 프레임 */
+#home2 footer {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.keyboard-input {
+  margin-bottom: 10px;
+}
+
+.keyboard {
+  background-color: #d1d5db;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.key-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+
+.key {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 10px 8px;
+  margin: 0 2px;
+  font-size: 14px;
+  flex-grow: 1;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.space-key { flex-grow: 6; }
+.shift-key, .backspace-key { flex-grow: 1.5; font-size: 12px; }
+
+/* TimeSwap 프레임 */
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post {
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.post h3 { margin: 0 0 5px; font-weight: bold; }
+.post .author { margin: 0 0 10px; font-size: 12px; color: #999; }
+.post .body-text { margin: 0; font-size: 14px; color: #666; }
+
+/* TimeSwap(A) 프레임 */
+.post-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.post-detail h3 { margin: 10px 0 5px; }
+.post-detail .date-text, .post-detail .author-text, .post-detail .body-text {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+}
+.accept-btn {
+  align-self: flex-end;
+  padding: 10px 20px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Schedule 프레임 */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+.calendar-header i { cursor: pointer; }
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar {
+  width: 100%;
+}
+
+.day-labels-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.day-label {
+  flex: 1;
+  font-weight: bold;
+  font-size: 12px;
+  text-align: center;
+  display: inline-block;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  width: 100%;
+}
+.day-cell {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+  min-height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+.day-cell.empty { border: none; }
+
+.schedule-item {
+  width: 90%;
+  padding: 5px;
+  margin-top: 5px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+.purple { background-color: #8a2be2; }
+.orange { background-color: #ffa500; }
+
+.popup-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+.popup-content {
+  background-color: #fff;
+  width: 80%;
+  max-width: 300px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.close-popup {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Frame 4 프레임 */
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #8a2be2;
+}
+
+.form-group input, .form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.form-group textarea {
+  resize: none;
+  height: 100px;
+}
+
+.dropdown-wrapper {
+  position: relative;
+}
+
+.dropdown-wrapper input {
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  display: none;
+}
+.dropdown-menu.visible { display: block; }
+.dropdown-menu li {
+  padding: 10px;
+  cursor: pointer;
+}
+.dropdown-menu li:hover { background-color: #f0f0f0; }
+
+.calendar-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #8a2be2;
+}
+
+.calendar-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  padding: 10px;
+}
+.calendar-dropdown.visible { display: block; }
+
+.calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.days-of-week { display: flex; justify-content: space-between; font-weight: bold; }
+.days-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
+.days-grid div { padding: 8px; cursor: pointer; }
+.days-grid div:hover { background-color: #eee; }
+.days-grid div.selected { background-color: #8a2be2; color: #fff; border-radius: 50%; }
+
+.submit-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #8a2be2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* 메뉴 오버레이 (Menu Overlay) */
+.menu-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+.menu-content {
+  background-color: #fff;
+  width: 250px;
+  height: 100%;
+  position: absolute;
+  left: -250px;
+  transition: left 0.3s ease-in-out;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+.menu-overlay.active .menu-content {
+  left: 0;
+}
+.menu-content .close-icon {
+  align-self: flex-end;
+  cursor: pointer;
+  font-size: 20px;
+}
+.login-state {
+  text-align: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #eee;
+}
+.signin-text {
+  margin: 0 0 10px;
+  color: #555;
+}
+.signin-btn {
+  padding: 8px 15px;
+  border: 1px solid #ccc;
+  background: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.profile-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #eee;
+}
+.profile-info img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.menu-items {
+  padding: 20px 0;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+}
+.menu-item i { margin-right: 10px; }
+.menu-item:hover { background-color: #f0f0f0; }
+
+#menu.login .login-state { display: none; }
+#menu.login .profile-info { display: flex; }
+#menu .profile-info { display: none; }
+
+/* 페이롤 프레임들 */
+.payroll-main-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.payroll-btn {
+  width: 90%;
+  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.payroll-btn i {
+  color: #8a2be2;
+}
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.search-form .input-group {
+  position: relative;
+}
+.search-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+.search-form .search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8a2be2;
+}
+
+.payroll-result {
+  padding: 20px;
+  text-align: center;
+}
+.payroll-result h3 {
+  color: #8a2be2;
+}
+.result-box {
+  border: 1px solid #8a2be2;
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 15px;
+}
+.result-text {
+  white-space: pre-wrap;
+  text-align: left;
+  line-height: 1.5;
+}
